@@ -3,14 +3,14 @@ import { oauth2Client } from "../config/googleApi";
 import axios from "axios";
 import { User } from "../models/user.models";
 import { createAccessToken, createRefreshToken } from "../utils/authService";
-import { googleLoginSchema } from "../validations/googleLogin.validation";
+import { googleLoginSchema, roleSchema } from "../validations/googleLogin.validation";
 
 export const loginController = async (req: Request, res: Response) => {
     try {
         const parsed = googleLoginSchema.safeParse(req.body);
-       if(!parsed.success){
-        return res.status(400).json({msg: "Invalid request", error: parsed.error.issues})
-       }
+        if (!parsed.success) {
+            return res.status(400).json({ msg: "Invalid request", error: parsed.error.issues })
+        }
 
         const googleRes = await oauth2Client.getToken(parsed.data.code);
         oauth2Client.setCredentials(googleRes.tokens);
@@ -58,8 +58,42 @@ export const loginController = async (req: Request, res: Response) => {
 
 export const addRole = async (req: Request, res: Response) => {
     try {
+        const parsed = roleSchema.safeParse(req.body);
+        if (!parsed.success) {
+            return res.status(400).json({ msg: "Invalid inputs", error: parsed.error.issues })
+        };
+
+        const user = await User.findByIdAndUpdate(req.user?._id, {
+            $set: {
+                role: parsed.data.role
+            }
+        }, {
+            new: true
+        });
+
+        if (!user) {
+            return res.status(404).json({ msg: "User not found or missing fields" });
+        }
+
+        const accessToken = createAccessToken(user._id.toString(), user.role);
+        const refreshToken = createRefreshToken(user._id.toString(), user.role);
+
+        user.refreshToken = refreshToken;
+        await user.save({ validateBeforeSave: false });
+
+        return res.status(200)
+            .cookie("accessToken", accessToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 15 * 60 * 1000
+            })
+            .cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 3 * 24 * 60 * 60 * 1000
+            }).json({success: true, msg: "role updated successfully", data: user})
 
     } catch (error) {
-
+        return res.status(500).json({ msg: "Internal server error" })
     }
 }
