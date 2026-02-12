@@ -15,7 +15,7 @@ export const loginController = async (req: Request, res: Response) => {
         const googleRes = await oauth2Client.getToken(parsed.data.code);
         oauth2Client.setCredentials(googleRes.tokens);
 
-        const userRes = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens}`);
+        const userRes = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`);
 
         const { id: googleId, email, name, picture } = userRes.data;
         if (!googleId || !email) {
@@ -49,7 +49,14 @@ export const loginController = async (req: Request, res: Response) => {
                 secure: true,
                 maxAge: 3 * 24 * 60 * 60 * 1000
             })
-            .json({ success: true, msg: "Login successfully", data: user })
+            .json({
+                success: true, msg: "Login successfully", data: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    profile: user.profile
+                }
+            })
     } catch (error) {
         console.error("error while login", error);
         return res.status(500).json({ msg: "Something went wrong" });
@@ -91,7 +98,14 @@ export const addRole = async (req: Request, res: Response) => {
                 httpOnly: true,
                 secure: true,
                 maxAge: 3 * 24 * 60 * 60 * 1000
-            }).json({success: true, msg: "role updated successfully", data: user})
+            }).json({
+                success: true, msg: "role updated successfully", data: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    profile: user.profile
+                }
+            })
 
     } catch (error) {
         return res.status(500).json({ msg: "Internal server error" })
