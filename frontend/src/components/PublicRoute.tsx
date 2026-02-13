@@ -3,7 +3,8 @@ import { useAppSelector } from '../hooks/useRedux'
 import { Navigate } from 'react-router'
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-    const { user } = useAppSelector(state => state.auth)
+    const { user, loading } = useAppSelector(state => state.auth);
+
     if (user) {
         return <Navigate to="/home" replace />
     };

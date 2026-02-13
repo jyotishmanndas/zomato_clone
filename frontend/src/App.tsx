@@ -8,7 +8,8 @@ import toast from 'react-hot-toast'
 import Home from './pages/Home'
 import PublicRoute from './components/PublicRoute'
 import ProtectedRoute from './components/ProtectedRoute'
-import Role from './pages/Role'
+import SelectRole from './pages/SelectRole'
+
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +24,7 @@ const App = () => {
     <Routes>
       <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
       <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
-      <Route path='/select-role' element={<ProtectedRoute><Role /></ProtectedRoute>} />
+      <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
     </Routes>
   )
 }

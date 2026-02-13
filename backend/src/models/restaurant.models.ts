@@ -1,0 +1,69 @@
+import mongoose, { Document, Model, Schema } from "mongoose";
+
+export interface IRestaurant extends Document {
+    name: string;
+    description: string;
+    image: string;
+    phone: number;
+    ownerId: string;
+    isVerified: boolean;
+    autoLocation: {
+        type: "Point",
+        coordinates: [number, number];  //longitude latitude
+        formattedAddress: string;
+    };
+    isOpen: boolean,
+    createdAt: Date,
+    updatedAt: Date
+}
+
+
+const restaurantSchema = new Schema<IRestaurant>({
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    description: {
+        type: String
+    },
+    phone: {
+        type: Number,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true
+    },
+    isVerified: {
+        type: Boolean,
+    },
+    ownerId: {
+        type: String,
+        required: true
+    },
+    autoLocation: {
+        type: {
+            type: String,
+            enum: ["Point"],
+            required: true
+        },
+        coordinates: {
+            type: [Number, Number],
+            required: true
+        },
+        formattedAddress: {
+            type: String
+        }
+    },
+    isOpen: {
+        type: Boolean,
+        default: false
+    }
+}, {
+    timestamps: true
+});
+
+restaurantSchema.index({ autoLocation: "2dsphere" });
+
+export const Restaurant: Model<IRestaurant> = mongoose.model("Restaurant", restaurantSchema)
