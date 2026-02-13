@@ -5,9 +5,12 @@ import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { FcGoogle } from "react-icons/fc"
+import { useAppDispatch } from '../hooks/useRedux';
+import { setUser } from '../features/authSlice';
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const responseGoogle = async (authResult: any) => {
         try {
@@ -16,6 +19,7 @@ const Login = () => {
             });
 
             if (res.status === 200) {
+                dispatch(setUser(res.data.data))
                 toast.success(res.data.msg);
                 navigate("/home")
             }

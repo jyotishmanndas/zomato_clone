@@ -54,14 +54,15 @@ export const loginController = async (req: Request, res: Response) => {
                     id: user._id,
                     name: user.name,
                     email: user.email,
-                    profile: user.profile
+                    profile: user.profile,
+                    role: user.role
                 }
             })
     } catch (error) {
         console.error("error while login", error);
         return res.status(500).json({ msg: "Something went wrong" });
     }
-}
+};
 
 export const addRole = async (req: Request, res: Response) => {
     try {
@@ -78,7 +79,7 @@ export const addRole = async (req: Request, res: Response) => {
             new: true
         });
 
-        if (!user) {
+        if (!user || !user.role) {
             return res.status(404).json({ msg: "User not found or missing fields" });
         }
 
@@ -103,7 +104,8 @@ export const addRole = async (req: Request, res: Response) => {
                     id: user._id,
                     name: user.name,
                     email: user.email,
-                    profile: user.profile
+                    profile: user.profile,
+                    role: user.role
                 }
             })
 
@@ -111,3 +113,23 @@ export const addRole = async (req: Request, res: Response) => {
         return res.status(500).json({ msg: "Internal server error" })
     }
 }
+
+export const userprofileController = async (req: Request, res: Response) => {
+    try {
+        if (req.user?._id) {
+            return res.status(200)
+                .json({
+                    success: true, msg: "Profile fetched successfully", data: {
+                        id: req.user._id,
+                        name: req.user.name,
+                        email: req.user.email,
+                        profile: req.user.profile,
+                        role: req.user.role
+                    }
+                })
+        }
+    } catch (error) {
+        console.log("Error while fetching user profile", error);
+        return res.status(500).json({ msg: "Internal server error" });
+    }
+};

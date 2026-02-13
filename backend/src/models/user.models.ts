@@ -6,7 +6,7 @@ export interface IUser extends Document {
     name: string,
     email: string,
     profile: string,
-    role: Role,
+    role: Role | null,
     refreshToken: string,
     googleId: string,
     createdAt: Date,
@@ -31,11 +31,12 @@ const userSchema = new Schema<IUser>({
     role: {
         type: String,
         enum: ["customer", "rider", "seller"],
+        default: null
     },
     refreshToken: {
         type: String
     },
-    googleId:{
+    googleId: {
         type: String,
         unique: true,
         required: true
