@@ -4,7 +4,7 @@ export interface IRestaurant extends Document {
     name: string;
     description: string;
     image: string;
-    phone: number;
+    phone: string;
     ownerId: string;
     isVerified: boolean;
     autoLocation: {
@@ -28,7 +28,7 @@ const restaurantSchema = new Schema<IRestaurant>({
         type: String
     },
     phone: {
-        type: Number,
+        type: String,
         required: true
     },
     image: {

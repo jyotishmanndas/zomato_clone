@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
+import restaurantRoutes from "./routes/restaurant.routes"
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use(express.urlencoded({ extended: true, limit: "16b" }))
 app.use(cookieParser());
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/restaurant", restaurantRoutes);
 
 export default app;

@@ -6,4 +6,4 @@ export const googleLoginSchema = z.object({
 
 export const roleSchema = z.object({
     role: z.enum(["customer", "rider", "seller"])
-})
+});
