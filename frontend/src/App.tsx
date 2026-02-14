@@ -9,6 +9,7 @@ import Home from './pages/Home'
 import PublicRoute from './components/PublicRoute'
 import ProtectedRoute from './components/ProtectedRoute'
 import SelectRole from './pages/SelectRole'
+import Navbar from './components/Navbar'
 
 
 const App = () => {
@@ -21,11 +22,14 @@ const App = () => {
   }, [])
 
   return (
-    <Routes>
-      <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
-      <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
-      <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
-    </Routes>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
+      </Routes>
+    </>
   )
 }
 

@@ -13,7 +13,7 @@ export const uploadtoIK = async (file: Buffer, fileName: string) => {
         const res = await imageKit.upload({
             file,
             fileName,
-            folder: "Restaurant"
+            folder: "Restaurants"
         });
 
         return res

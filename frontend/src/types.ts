@@ -5,3 +5,9 @@ export interface AuthUser {
     profile: string;
     role: string | null;
 }
+
+export interface LocationData {
+    latitude: number;
+    longitude: number;
+    formattedAddress: string
+}

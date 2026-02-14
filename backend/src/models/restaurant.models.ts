@@ -1,11 +1,11 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Document, Model, Schema, Types } from "mongoose";
 
 export interface IRestaurant extends Document {
     name: string;
     description: string;
     image: string;
     phone: string;
-    ownerId: string;
+    ownerId: Types.ObjectId;
     isVerified: boolean;
     autoLocation: {
         type: "Point",
@@ -39,7 +39,8 @@ const restaurantSchema = new Schema<IRestaurant>({
         type: Boolean,
     },
     ownerId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true
     },
     autoLocation: {

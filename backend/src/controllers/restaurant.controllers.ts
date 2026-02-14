@@ -6,7 +6,7 @@ import { uploadtoIK } from "../utils/imagekit";
 export const addRestaurant = async (req: Request, res: Response) => {
     try {
         if (req.user?.role !== "seller") {
-            return res.status(400).json({ msg: "Invalid role" })
+            return res.status(403).json({ msg: "Forbidden: seller role required" })
         };
 
         const parsed = restaurantSchema.safeParse(req.body);
@@ -32,7 +32,6 @@ export const addRestaurant = async (req: Request, res: Response) => {
         }
 
         const exstingRestaurant = await Restaurant.findOne({
-            name: parsed.data.name,
             ownerId: req.user._id.toString(),
         });
         if (exstingRestaurant) {
@@ -40,12 +39,16 @@ export const addRestaurant = async (req: Request, res: Response) => {
         };
 
         const uploadImage = await uploadtoIK(image.data.buffer, image.data.originalname);
+        if (!uploadImage?.url) {
+            return res.status(500).json({ msg: "Image upload failed" });
+        };
 
         const restaurant = await Restaurant.create({
             name: parsed.data.name,
             description: parsed.data.description,
             phone: parsed.data.phone,
-            image: uploadImage?.url,
+            image: uploadImage.url,
+            ownerId: req.user._id,
             autoLocation: {
                 type: "Point",
                 coordinates: parsed.data.autoLocation.coordinates,
@@ -55,7 +58,7 @@ export const addRestaurant = async (req: Request, res: Response) => {
 
         return res.status(201).json({ success: true, msg: "Restaurant created successfully", restaurant })
     } catch (error) {
-        console.log("Error while creating restaurant", error);
+        console.log("Error creating restaurant", error);
         return res.status(500).json({ msg: "Internal server error" })
     }
-}
+};
