@@ -1,40 +1,8 @@
 import { MapPinned, Search } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import type { LocationData } from '../types';
+import { useAppSelector } from '../hooks/useRedux'
 
 const SearchBar = () => {
-    const [loadingLocation, setLoadingLocation] = useState(false);
-    const [location, setLocation] = useState<LocationData | null>(null);
-    const [city, setCity] = useState("Fetching location");
-
-    useEffect(() => {
-        if (!navigator.geolocation) return alert("Please allow the location to continue");
-        setLoadingLocation(true);
-
-        navigator.geolocation.getCurrentPosition(async(postion) =>{
-            const {latitude, longitude} = postion.coords;
-
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-                const data = await res.json();
-
-                setLocation({
-                    latitude,
-                    longitude,
-                    formattedAddress: data.display_name || "current location"
-                })
-
-                setCity(data.address.city || data.address.town || data.address.village || "Your location")
-            } catch (error) {
-                setLocation({
-                    latitude,
-                    longitude,
-                    formattedAddress: "current location"
-                })
-                setCity("Failed to load")
-            }
-        });
-    }, [])
+    const { city } = useAppSelector(state => state.location)
 
     return (
         <div className='border-t px-4 py-3'>

@@ -30,7 +30,7 @@ const Navbar = () => {
 
     return (
         <div className='w-full bg-white shadow-sm'>
-            <div className='mx-auto flex max-w-7xl items-center justify-between px-4 py-3 '>
+            <div className='mx-auto flex max-w-7xl items-center justify-between px-4 py-4 '>
                 <Link to={"/"} className='text-2xl font-bold italic text-[#E23744] cursor-pointer'>ZOMATO</Link>
 
                 <div className='flex items-center gap-4'>
