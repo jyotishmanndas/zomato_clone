@@ -21,4 +21,15 @@ export const uploadtoIK = async (file: Buffer, fileName: string) => {
         console.log("Error while uploading image", error);
         throw new Error("Failed to upload image");
     }
+};
+
+export const deleteFromIk = async (fileId: string[]) => {
+    try {
+        if (!fileId) return;
+
+        await imageKit.bulkDeleteFiles(fileId)
+    } catch (error) {
+        console.error("Image delete failed", error);
+        throw new Error("Failed to delete image");
+    }
 }
