@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { imageSchema, restaurantSchema } from "../validations/restaurant.validations";
+import { imageSchema, restaurantSchema, updateRestaurantDetails } from "../validations/restaurant.validations";
 import { Restaurant } from "../models/restaurant.models";
 import { uploadtoIK } from "../utils/imagekit";
+import mongoose from "mongoose";
 
 export const addRestaurant = async (req: Request, res: Response) => {
     try {
@@ -9,8 +10,8 @@ export const addRestaurant = async (req: Request, res: Response) => {
             return res.status(403).json({ msg: "Forbidden: seller role required" })
         };
 
-        const body = { ...req.body};
-        if(typeof body.autoLocation === "string"){
+        const body = { ...req.body };
+        if (typeof body.autoLocation === "string") {
             try {
                 body.autoLocation = JSON.parse(body.autoLocation)
             } catch (error) {
@@ -88,6 +89,84 @@ export const getMyRestaurant = async (req: Request, res: Response) => {
         return res.status(200).json({ msg: "Restaurant fetched", restaurant })
     } catch (error) {
         console.log("Error white fetching restaurant", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+};
+
+export const updateRestaurantStatus = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "seller") {
+            return res.status(403).json({ msg: "Forbidden: seller role required" })
+        };
+
+        const { restaurantId } = req.params;
+        if (!restaurantId) {
+            return res.status(400).json({ msg: "restaurantId is required" })
+        };
+
+        if (!mongoose.Types.ObjectId.isValid(restaurantId as string)) {
+            return res.status(400).json({ msg: "Invalid Restaurant ID format" });
+        };
+
+        const restaurant = await Restaurant.findOne({
+            _id: restaurantId,
+            ownerId: req.user._id
+        });
+        if (!restaurant) {
+            return res.status(404).json({ msg: "Restaurant not found or not owned by user" })
+        };
+
+        restaurant.isOpen = !restaurant.isOpen;
+        await restaurant.save()
+
+        return res.status(200).json({ success: true, msg: "Status updated successfully", restaurant })
+    } catch (error) {
+        console.log("Error while updating restaurant status", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+}
+
+export const updateRestaurant = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "seller") {
+            return res.status(403).json({ msg: "Forbidden: seller role required" })
+        };
+
+        const { restaurantId } = req.params;
+        if (!restaurantId) {
+            return res.status(400).json({ msg: "restaurantId is required" })
+        };
+
+        if (!mongoose.Types.ObjectId.isValid(restaurantId as string)) {
+            return res.status(400).json({ msg: "Invalid Restaurant ID format" });
+        };
+
+        const parsed = updateRestaurantDetails.safeParse(req.body);
+        if (!parsed.success) {
+            return res.status(400).json({ msg: "Invalid inputs", issues: parsed.error.issues })
+        };
+
+        const updateBody: any = {};
+
+        if (parsed.data.name) updateBody.name = parsed.data.name;
+        if (parsed.data.description) updateBody.description = parsed.data.description;
+        if (parsed.data.phone) updateBody.phone = parsed.data.phone;
+
+        const restaurant = await Restaurant.findOneAndUpdate({
+            _id: restaurantId,
+            ownerId: req.user._id
+        }, {
+            $set: updateBody
+        });
+        if (!restaurant) {
+            return res.status(404).json({
+                msg: "Restaurant not found or not owned by user"
+            });
+        }
+
+        return res.status(200).json({success: true, msg: "Details updtaed successully", restaurant})
+    } catch (error) {
+        console.log("Error while updating restaurant details", error);
         return res.status(500).json({ msg: "Internal server error" })
     }
 }

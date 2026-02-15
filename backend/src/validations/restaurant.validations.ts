@@ -26,3 +26,11 @@ export const imageSchema = z.object({
         .max(5 * 1024 * 1024, "Max file size is 5MB"),
     buffer: z.instanceof(Buffer)
 });
+
+export const updateRestaurantDetails = z.object({
+    name: z.string().min(3).optional(),
+    description: z.string().min(5).optional(),
+    phone: z.string().regex(/^\d{10}$/, "Phone must be 10 digits").optional(),
+}).refine((data) => {
+    return data.name?.trim() || data.description?.trim() || data.phone?.trim()
+}, { error: "At least one field required" })

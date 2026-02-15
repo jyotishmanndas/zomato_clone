@@ -29,7 +29,7 @@ const Navbar = () => {
     }, [search])
 
     return (
-        <div className='w-full bg-white shadow-sm'>
+        <div className='w-full bg-white shadow-sm fixed left-0 top-0 z-50'>
             <div className='mx-auto flex max-w-7xl items-center justify-between px-4 py-4 '>
                 <Link to={"/"} className='text-2xl font-bold italic text-[#E23744] cursor-pointer'>ZOMATO</Link>
 
