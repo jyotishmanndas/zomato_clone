@@ -9,7 +9,16 @@ export const addRestaurant = async (req: Request, res: Response) => {
             return res.status(403).json({ msg: "Forbidden: seller role required" })
         };
 
-        const parsed = restaurantSchema.safeParse(req.body);
+        const body = { ...req.body};
+        if(typeof body.autoLocation === "string"){
+            try {
+                body.autoLocation = JSON.parse(body.autoLocation)
+            } catch (error) {
+                body.autoLocation = req.body.autoLocation
+            }
+        }
+
+        const parsed = restaurantSchema.safeParse(body);
         if (!parsed.success) {
             return res.status(400).json({ msg: "Invalid inputs", error: parsed.error.issues })
         };
@@ -62,3 +71,23 @@ export const addRestaurant = async (req: Request, res: Response) => {
         return res.status(500).json({ msg: "Internal server error" })
     }
 };
+
+export const getMyRestaurant = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "seller") {
+            return res.status(403).json({ msg: "Forbidden: seller role required" })
+        };
+
+        const restaurant = await Restaurant.findOne({
+            ownerId: req.user._id
+        });
+        if (!restaurant) {
+            return res.status(404).json({ msg: "No Restaurant found" })
+        };
+
+        return res.status(200).json({ msg: "Restaurant fetched", restaurant })
+    } catch (error) {
+        console.log("Error white fetching restaurant", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+}

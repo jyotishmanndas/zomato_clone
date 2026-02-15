@@ -37,6 +37,7 @@ const restaurantSchema = new Schema<IRestaurant>({
     },
     isVerified: {
         type: Boolean,
+        default: false
     },
     ownerId: {
         type: mongoose.Schema.Types.ObjectId,

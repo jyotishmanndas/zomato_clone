@@ -3,9 +3,7 @@ import { z } from "zod";
 export const restaurantSchema = z.object({
     name: z.string().min(3),
     description: z.string().min(5).optional(),
-    phone: z.string().min(10).max(10),
-    ownerId: z.string(),
-    isOpen: z.boolean(),
+    phone: z.string().regex(/^\d{10}$/, "Phone must be 10 digits"),
     autoLocation: z.object({
         type: z.literal("Point"),
         coordinates: z.tuple([

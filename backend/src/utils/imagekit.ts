@@ -1,8 +1,8 @@
 import ImageKit from "imagekit";
 
 const imageKit = new ImageKit({
-    privateKey: process.env.IK_PUBLIC_KEY!,
-    publicKey: process.env.IK_PRIVATE_KEY!,
+    privateKey: process.env.IK_PRIVATE_KEY!,
+    publicKey: process.env.IK_PUBLIC_KEY!,
     urlEndpoint: process.env.IK_URL!
 });
 
