@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import type { LocationData } from '../types';
+import React, { useEffect } from 'react'
 import { useAppDispatch } from './useRedux';
 import { setCity, setLocation } from '../features/locationSlice';
 
