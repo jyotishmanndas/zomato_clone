@@ -164,9 +164,67 @@ export const updateRestaurant = async (req: Request, res: Response) => {
             });
         }
 
-        return res.status(200).json({success: true, msg: "Details updtaed successully", restaurant})
+        return res.status(200).json({ success: true, msg: "Details updtaed successully", restaurant })
     } catch (error) {
         console.log("Error while updating restaurant details", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+};
+
+export const getNearByRestaurant = async (req: Request, res: Response) => {
+    try {
+        const { longitude, latitude, radius = 5000, search = "" } = req.query;
+        if (!longitude || !latitude) {
+            return res.status(400).json({ msg: "Latitude and Longitude are required" })
+        };
+
+        const query: any = {
+            isVerified: true
+        }
+
+        if (search && typeof search === "string") {
+            query.name = {
+                $regex: search,
+                $options: "i"
+            }
+        };
+
+        const restaurant = await Restaurant.aggregate([
+            {
+                $geoNear: {
+                    near: {
+                        type: "Point",
+                        coordinates: [Number(longitude), Number(latitude)]
+                    },
+                    distanceField: "distance",
+                    maxDistance: Number(radius),
+                    spherical: true,
+                    query
+                }
+            },
+            {
+                $sort: {
+                    isOpen: -1,
+                    distance: 1
+                }
+            },
+            {
+                $addFields: {
+                    distanceKm: {
+                        $round: [{ $divide: ["$distance", 1000] }, 2]
+                    }
+                }
+            }
+        ]);
+
+        if (!restaurant.length) {
+            return res.status(404).json({ msg: "Restaurant not found" })
+        };
+
+        return res.status(200).json({ success: true, count: restaurant.length, restaurant })
+
+    } catch (error) {
+        console.log("Error while getting near by restaurants", error);
         return res.status(500).json({ msg: "Internal server error" })
     }
 }

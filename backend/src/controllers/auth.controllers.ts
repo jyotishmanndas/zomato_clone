@@ -81,7 +81,7 @@ export const addRole = async (req: Request, res: Response) => {
 
         if (!user || !user.role) {
             return res.status(404).json({ msg: "User not found or missing fields" });
-        }
+        };
 
         const accessToken = createAccessToken(user._id.toString(), user.role);
         const refreshToken = createRefreshToken(user._id.toString(), user.role);
@@ -108,7 +108,6 @@ export const addRole = async (req: Request, res: Response) => {
                     role: user.role
                 }
             })
-
     } catch (error) {
         return res.status(500).json({ msg: "Internal server error" })
     }
