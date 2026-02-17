@@ -7,7 +7,7 @@ export const menuSchema = z.object({
     isAvailable: z.boolean(),
 });
 
-export const FileSchema = z.object({
+export const imageSchema = z.object({
     originalname: z.string().min(1, "Filename required"),
     mimetype: z.string().min(1, { error: "Mimetype is required" })
         .refine((file) => file.startsWith("image/"), {
@@ -19,10 +19,6 @@ export const FileSchema = z.object({
         .max(5 * 1024 * 1024, "Max file size is 5MB"),
     buffer: z.instanceof(Buffer)
 });
-
-export const imageSchema = z.array(FileSchema)
-    .min(1, "At least one image required")
-    .max(3, "Maximum 3 images allowed");
 
 export const updateMenuItemSchema = z.object({
     name: z.string().trim().min(3).max(60).optional(),

@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes";
 import restaurantRoutes from "./routes/restaurant.routes";
 import menuRoutes from "./routes/menu.routes";
+import cartRoutes from "./routes/cart.routes";
 
 const app = express();
 
@@ -19,5 +20,6 @@ app.use(cookieParser());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/restaurant", restaurantRoutes);
 app.use("/api/v1/menu", menuRoutes);
+app.use("/api/v1/cart", cartRoutes)
 
 export default app;

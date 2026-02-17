@@ -6,7 +6,7 @@ export interface IMenu extends Document {
     image: {
         url: string,
         fileId: string
-    }[];
+    };
     price: number;
     isAvailable: boolean
     restaurantId: Types.ObjectId;
@@ -24,18 +24,16 @@ const menuSchema = new Schema<IMenu>({
     description: {
         type: String,
     },
-    image: [
-        {
-            url: {
-                type: String,
-                required: true
-            },
-            fileId: {
-                type: String,
-                required: true
-            }
+    image: {
+        url: {
+            type: String,
+            required: true
+        },
+        fileId: {
+            type: String,
+            required: true
         }
-    ],
+    },
     price: {
         type: Number,
         required: true

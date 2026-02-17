@@ -23,12 +23,19 @@ export const addMenuItem = async (req: Request, res: Response) => {
             return res.status(400).json({ msg: "Invalid inputs", error: parsed.error.issues })
         };
 
-        const image = req.files;
-        if (!image || image.length === 0) {
+        const image = req.file;
+        if (!image) {
             return res.status(400).json({ msg: "Image is required" })
         };
 
-        const imageCheck = imageSchema.safeParse(image);
+        const imageMetaData = {
+            originalname: image.originalname,
+            mimetype: image.mimetype,
+            size: image.size,
+            buffer: image.buffer
+        };
+
+        const imageCheck = imageSchema.safeParse(imageMetaData);
         if (!imageCheck.success) {
             return res.status(400).json({ msg: "Invalid file", error: imageCheck.error.issues })
         };
@@ -41,27 +48,19 @@ export const addMenuItem = async (req: Request, res: Response) => {
             return res.status(400).json({ msg: "Item already exists on the menu" })
         };
 
-        const uploadedImages = await Promise.all(
-            imageCheck.data.map((i) => uploadtoIK(i.buffer, i.originalname))
-        );
-
-        const imageUrls = uploadedImages
-            .filter((img) => Boolean(img))
-            .map((img) => ({
-                url: img?.url,
-                fileId: img?.fileId
-            }));
-
-        if (imageUrls.length === 0) {
-            return res.status(500).json({
-                msg: "Image upload failed"
-            });
-        }
+        const { buffer, originalname } = imageCheck.data
+        const uploadedImages = await uploadtoIK(buffer, originalname)
+        if (!uploadedImages?.url || uploadedImages.fileId) {
+            return res.status(400).json({ msg: "Menu image upload failed" })
+        };
 
         const menuItem = await Menu.create({
             name: parsed.data.name.toLowerCase(),
             description: parsed.data.description || "",
-            image: imageUrls,
+            image: {
+                url: uploadedImages.url,
+                fileId: uploadedImages.fileId
+            },
             price: parsed.data.price,
             isAvailable: parsed.data.isAvailable || true,
             restaurantId: restaurant._id
@@ -203,9 +202,9 @@ export const deleteMenuItem = async (req: Request, res: Response) => {
             return res.status(404).json({ msg: "Restaurant not found" })
         };
 
-        const fileId = menuItem.image.map((f) => f.fileId);
+        const fileId = menuItem.image.fileId
 
-        await deleteFromIk(fileId);
+        await deleteFromIk([fileId]);
         await menuItem.deleteOne();
         return res.status(200).json({ success: true, msg: "Item deleted successfully" })
 
