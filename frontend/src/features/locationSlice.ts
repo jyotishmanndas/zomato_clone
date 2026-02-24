@@ -24,5 +24,5 @@ export const locationSlice = createSlice({
     }
 });
 
-export const {setLocation, setCity} = locationSlice.actions;
+export const { setLocation, setCity } = locationSlice.actions;
 export default locationSlice.reducer;

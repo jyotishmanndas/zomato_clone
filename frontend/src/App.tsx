@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
-import { Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 import Login from './pages/Login'
 import { axiosInstance } from './config/axiosInstance'
 import { useAppDispatch, useAppSelector } from './hooks/useRedux'
-import { setUser } from './features/authSlice'
-import toast from 'react-hot-toast'
+import { removeUser, setUser } from './features/authSlice'
 import Home from './pages/Home'
 import PublicRoute from './components/PublicRoute'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -13,21 +12,22 @@ import Restaurant from './pages/Restaurant'
 import AddRestaurantForm from './components/forms/AddRestaurantForm'
 import { useGeolocation } from './hooks/useGeolocation'
 import AuthLayout from './layouts/AuthLayout'
-
+import SellerRoute from './components/SellerRoute'
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector(state => state.auth)
+  const { loading } = useAppSelector(state => state.auth);
+
   useGeolocation()
 
   useEffect(() => {
     axiosInstance.get(`/api/v1/auth/user/profile`)
-      .then(res => dispatch(setUser(res.data.data)))
-      .catch(err => toast.error(err.response.data.msg))
+      .then(res => dispatch(setUser(res.data.data)))   
+      .catch(() => dispatch(removeUser()))
   }, []);
 
-  if (user && user?.role === "seller") {
-    return <Restaurant />
+  if (loading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -38,7 +38,8 @@ const App = () => {
           <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
         </Route>
         <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
-        <Route path='/create-restaurant' element={<AddRestaurantForm />} />
+        <Route path='/restaurant' element={<SellerRoute><Restaurant /></SellerRoute>} />
+        <Route path='/create-restaurant' element={<SellerRoute><AddRestaurantForm /></SellerRoute>} />
       </Routes>
     </>
   )

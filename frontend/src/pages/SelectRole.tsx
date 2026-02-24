@@ -31,7 +31,11 @@ const SelectRole = () => {
             if (res.status === 200) {
                 dispatch(setUser(res.data.data));
                 toast.success(res.data.msg);
-                navigate("/home");
+                if (res.data.data.role === "seller") {
+                    navigate("/restaurant")
+                } else {
+                    navigate("/home")
+                }
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {

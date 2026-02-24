@@ -57,6 +57,7 @@ const AddRestaurantForm = () => {
                 toast.success(res.data.msg);
                 form.reset();
                 setPreview(null);
+                navigate("/restaurant")
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -68,8 +69,6 @@ const AddRestaurantForm = () => {
     return (
         <div className="min-h-screen w-full bg-[#FDFDFD] flex items-center justify-center p-4 md:p-10">
             <div className="w-full max-w-6xl bg-white rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] overflow-hidden flex flex-col md:flex-row border border-slate-100">
-                
-                {/* Left Side: Image Upload (Centered) */}
                 <div className="md:w-5/12 bg-slate-50 p-8 md:p-12 flex flex-col items-center justify-center border-r border-slate-100">
                     <div className="w-full max-w-sm">
                         <h3 className="text-xl font-bold text-slate-800 mb-6 text-center">Restaurant Cover</h3>
@@ -79,7 +78,7 @@ const AddRestaurantForm = () => {
                                 <>
                                     <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                                     <button
-                                        type="button" 
+                                        type="button"
                                         onClick={() => { setPreview(null); form.setValue("image", undefined as any); }}
                                         className="absolute top-4 right-4 bg-white/90 p-2 rounded-full text-[#E23744] shadow-lg hover:bg-[#E23744] hover:text-white transition-all z-10"
                                     >
@@ -122,7 +121,6 @@ const AddRestaurantForm = () => {
                     </div>
                 </div>
 
-                {/* Right Side: Form Details */}
                 <div className="md:w-7/12 p-8 md:p-16">
                     <div className="max-w-md mx-auto">
                         <header className="mb-10 text-center md:text-left">
@@ -131,8 +129,6 @@ const AddRestaurantForm = () => {
                         </header>
 
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                            
-                            {/* Name Field */}
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Restaurant Name</label>
                                 <div className="relative">
@@ -156,7 +152,6 @@ const AddRestaurantForm = () => {
                                 </div>
                             </div>
 
-                            {/* Phone Field */}
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Phone Number</label>
                                 <div className="relative">
@@ -179,7 +174,6 @@ const AddRestaurantForm = () => {
                                 </div>
                             </div>
 
-                            {/* Full Address Field */}
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Full Restaurant Address</label>
                                 <div className="flex items-start gap-4 px-4 py-4 bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl">
@@ -197,7 +191,6 @@ const AddRestaurantForm = () => {
                                 </div>
                             </div>
 
-                            {/* About Field */}
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">About</label>
                                 <div className="relative">

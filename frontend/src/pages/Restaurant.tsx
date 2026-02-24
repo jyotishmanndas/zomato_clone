@@ -32,7 +32,7 @@ const Restaurant = () => {
                             You haven't registered a restaurant yet. Start your journey and reach thousands of customers today.
                         </p>
                         <button
-                            onClick={() => navigate("/create-restaurant")} 
+                            onClick={() => navigate("/create-restaurant")}
                             className="w-full bg-[#E23744] hover:bg-black text-white flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all active:scale-95"
                         >
                             <Plus size={24} />
@@ -58,8 +58,8 @@ const Restaurant = () => {
                 <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] overflow-hidden">
                     <div className="flex flex-col md:flex-row">
                         <div className="md:w-2/5 relative h-64 md:h-auto overflow-hidden">
-                            <img 
-                                src={restaurant.image || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"} 
+                            <img
+                                src={restaurant.image || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"}
                                 alt={restaurant.name}
                                 className="w-full h-full object-cover"
                             />
@@ -100,7 +100,7 @@ const Restaurant = () => {
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <button 
+                                <button
                                     onClick={() => navigate(`/manage/${restaurant._id}`)}
                                     className="flex-1 bg-slate-900 hover:bg-black text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all group"
                                 >
