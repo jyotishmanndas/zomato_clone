@@ -14,6 +14,7 @@ import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { createMenuSchema } from "../../validations/menuSchema";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AddMenuFormProps {
     restaurantId: string;
@@ -21,6 +22,7 @@ interface AddMenuFormProps {
 
 const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
     const [preview, setPreview] = useState<string | null>(null);
+    const queryClient = useQueryClient();
 
     const form = useForm<z.infer<typeof createMenuSchema>>({
         resolver: zodResolver(createMenuSchema),
@@ -58,6 +60,7 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
 
             if (res.status === 201) {
                 toast.success(res.data.msg);
+                queryClient.invalidateQueries({ queryKey: ["menu"] });
                 form.reset();
                 setPreview(null);
             }

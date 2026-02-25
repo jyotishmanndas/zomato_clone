@@ -8,6 +8,7 @@ import {
 import { axiosInstance } from '../config/axiosInstance';
 import toast from 'react-hot-toast';
 import MenuForm from '../components/forms/MenuForm';
+import Menu from '../components/Menu/Menu';
 
 const Restaurant = () => {
     const { data, isLoading } = useRestaurantApi();
@@ -99,29 +100,13 @@ const Restaurant = () => {
                             <MenuForm restaurantId={restaurant._id} />
                         )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Example Menu Item */}
-                            <div className="bg-white p-4 rounded-3xl border border-slate-100 flex items-center gap-4 shadow-sm group">
-                                <div className="w-20 h-20 bg-slate-100 rounded-2xl overflow-hidden shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200" className="w-full h-full object-cover" alt="food" />
-                                </div>
-                                <div className="flex-1">
-                                    <h4 className="font-bold text-slate-900 text-md">Garden Salad Bowl</h4>
-                                    <p className="text-red-500 font-black text-sm">$14.00</p>
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <button className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-all"><Edit2 size={16} /></button>
-                                    <button className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"><Trash2 size={16} /></button>
-                                </div>
-                            </div>
-                        </div>
+                        <Menu />
                     </div>
                 )}
 
                 {activeTab === 'profile' && (
                     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/40">
-                            {/* Profile Header Image */}
                             <div className="h-48 bg-slate-900 relative">
                                 <img src={restaurant.image || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"} className="w-full h-full object-cover opacity-60" alt="banner" />
                                 <div className="absolute -bottom-10 left-10 w-24 h-24 bg-white rounded-3xl p-1 shadow-lg border border-slate-100">

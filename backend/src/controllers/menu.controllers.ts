@@ -18,12 +18,12 @@ export const addMenuItem = async (req: Request, res: Response) => {
             } catch (error) {
                 body.isAvailable = req.body.isAvailable
             }
-        }
+        };
 
         const { restaurantId } = req.params;
         if (!mongoose.Types.ObjectId.isValid(restaurantId as string)) {
             return res.status(400).json({ msg: "Invalid restaurant Id format" })
-        }
+        };
 
         const restaurant = await Restaurant.findOne({
             _id: restaurantId,
@@ -184,7 +184,7 @@ export const toogleMenuItemAvailability = async (req: Request, res: Response) =>
         menuItem.isAvailable = !menuItem.isAvailable;
         await menuItem.save();
 
-        return res.status(200).json({ msg: `item marked as ${menuItem.isAvailable ? "available" : "unavailable"}` })
+        return res.status(200).json({ msg: `Ttem marked as ${menuItem.isAvailable ? "available" : "unavailable"}`, menuItem })
 
     } catch (error) {
         console.error("Error while updating available menu items", error);
