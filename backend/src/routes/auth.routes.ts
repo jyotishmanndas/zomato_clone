@@ -7,6 +7,6 @@ const router = Router();
 router.post("/login", loginController);
 router.patch("/add/role", verifyJWT, addRole);
 
-router.get("/user/profile", verifyJWT, userprofileController)
+router.get("/user/profile", verifyJWT, userprofileController);
 
 export default router

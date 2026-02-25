@@ -8,7 +8,7 @@ const router = Router();
 
 router.use(verifyJWT);
 
-router.post("/add", upload.single("menuImg"), addMenuItem);
+router.post("/add/:restaurantId", upload.single("menuImg"), addMenuItem);
 router.get("/my-items", getItmesByRestaurant);
 router.patch("/update/:itemId", updateMenuItem);
 router.patch("/status/:itemId", toogleMenuItemAvailability)

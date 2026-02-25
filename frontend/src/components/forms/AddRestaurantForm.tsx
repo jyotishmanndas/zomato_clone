@@ -55,9 +55,9 @@ const AddRestaurantForm = () => {
             });
             if (res.status === 201) {
                 toast.success(res.data.msg);
-                form.reset();
                 setPreview(null);
-                navigate("/restaurant")
+                navigate(`/restaurant/${res.data.restaurant._id}`)
+                form.reset();
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {

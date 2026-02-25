@@ -8,7 +8,7 @@ const router = Router();
 router.use(verifyJWT);
 
 router.post("/create", upload.single("image"), addRestaurant);
-router.patch("/status", updateRestaurantStatus);
+router.patch("/status/:restaurantId", updateRestaurantStatus);
 router.patch("/update-details", updateRestaurant);
 router.get("/my/restaurant", getMyRestaurant);
 router.get("/all", getNearByRestaurant)

@@ -11,14 +11,29 @@ export const addMenuItem = async (req: Request, res: Response) => {
             return res.status(403).json({ msg: "Forbidden: seller role required" })
         };
 
+        const body = { ...req.body };
+        if (typeof body.isAvailable === "string") {
+            try {
+                body.isAvailable = JSON.parse(body.isAvailable)
+            } catch (error) {
+                body.isAvailable = req.body.isAvailable
+            }
+        }
+
+        const { restaurantId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(restaurantId as string)) {
+            return res.status(400).json({ msg: "Invalid restaurant Id format" })
+        }
+
         const restaurant = await Restaurant.findOne({
+            _id: restaurantId,
             ownerId: req.user._id
         });
         if (!restaurant) {
             return res.status(404).json({ msg: "Restaurant not found" })
         };
 
-        const parsed = menuSchema.safeParse(req.body);
+        const parsed = menuSchema.safeParse(body);
         if (!parsed.success) {
             return res.status(400).json({ msg: "Invalid inputs", error: parsed.error.issues })
         };
@@ -50,7 +65,7 @@ export const addMenuItem = async (req: Request, res: Response) => {
 
         const { buffer, originalname } = imageCheck.data
         const uploadedImages = await uploadtoIK(buffer, originalname)
-        if (!uploadedImages?.url || uploadedImages.fileId) {
+        if (!uploadedImages?.url || !uploadedImages.fileId) {
             return res.status(400).json({ msg: "Menu image upload failed" })
         };
 
