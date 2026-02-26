@@ -225,6 +225,24 @@ export const getNearByRestaurant = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.log("Error while getting near by restaurants", error);
+        return res.status(500).json({ msg: "Internal server error" });
+    }
+}
+
+export const getSingleRestaurant = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id as string)) {
+            return res.status(400).json({ msg: "Invalid restaurant id format" })
+        };
+
+        const restaurant = await Restaurant.findById(id);
+        if (!restaurant) {
+            return res.status(404).json({ msg: "Restauarant not found" })
+        };
+        return res.status(200).json({ success: true, restaurant })
+    } catch (error) {
+        console.log("Error while getting restaurants", error);
         return res.status(500).json({ msg: "Internal server error" })
     }
 }

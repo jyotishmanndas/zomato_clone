@@ -56,7 +56,7 @@ const AddRestaurantForm = () => {
             if (res.status === 201) {
                 toast.success(res.data.msg);
                 setPreview(null);
-                navigate(`/restaurant/${res.data.restaurant._id}`)
+                navigate(`/restaurant`)
                 form.reset();
             }
         } catch (error) {

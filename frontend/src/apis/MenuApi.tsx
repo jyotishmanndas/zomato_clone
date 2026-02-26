@@ -7,4 +7,13 @@ export const MenuApi = async () => {
     } catch (error) {
         console.log("Something went wrong when fetching", error);
     }
+};
+
+export const fetchedMenuItems = async (id: string) => {
+    try {
+        const res = await axiosInstance.get(`/api/v1/menu/items/${id}`);
+        return res.data.menuItems
+    } catch (error) {
+        console.log("Something went wrong when fetching", error);
+    }
 }

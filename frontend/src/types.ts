@@ -11,3 +11,17 @@ export interface LocationData {
     longitude: number;
     formattedAddress: string
 }
+
+export interface Restaurant {
+    name: string;
+    description: string;
+    image: string;
+    phone: string;
+    isVerified: boolean;
+    autoLocation: {
+        type: "Point",
+        coordinates: [number, number];  //longitude latitude
+        formattedAddress: string;
+    };
+    isOpen: boolean,
+}

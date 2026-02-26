@@ -17,7 +17,7 @@ const RestaurantCard = ({ id, name, image, distance, isOpen }: RestaurantCardPro
     <div className={`cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition-transform duration-300 hover:shadow-md ${!isOpen ? "opacity-80" : ""}`}
     onClick={() => {
       console.log(id)
-      navigate(`/restauranttt/${id}`)
+      navigate(`/restaurant/${id}`)
     }}
     >
 

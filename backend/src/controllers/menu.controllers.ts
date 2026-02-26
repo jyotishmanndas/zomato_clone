@@ -228,3 +228,35 @@ export const deleteMenuItem = async (req: Request, res: Response) => {
         return res.status(500).json({ msg: "Internal server error" });
     }
 };
+
+export const getMenuByRestauarant = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "customer") {
+            return res.status(403).json({ msg: "Forbidden: customer role required" })
+        };
+
+        const { restaurantId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(restaurantId as string)) {
+            return res.status(400).json({ msg: "Invalid item Id format" })
+        };
+
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            return res.status(404).json({ success: false, msg: "Restaurant not found" })
+        };
+
+        const menuItems = await Menu.find({
+            restaurantId: restaurant._id,
+            isAvailable: true
+        });
+
+        if (!menuItems) {
+            return res.status(404).json({ success: false, msg: "Menu not found" })
+        };
+
+        return res.status(200).json({ success: true, msg: "Menu fetched successfully", menuItems })
+    } catch (error) {
+        console.error("Error while getting menu items", error);
+        return res.status(500).json({ msg: "Internal server error" });
+    }
+}
