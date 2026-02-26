@@ -16,6 +16,7 @@ import SellerRoute from './components/SellerRoute'
 import Account from './pages/Account'
 import RestaurantPage from './pages/RestaurantPage'
 import Cart from './pages/Cart'
+import Address from './pages/Address'
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ const App = () => {
         <Route element={<AuthLayout />}>
           <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
           <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path='/address' element={<ProtectedRoute><Address /></ProtectedRoute>} />
           <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
           <Route path='/restaurant/:id' element={<ProtectedRoute><RestaurantPage /></ProtectedRoute>} />
           <Route path='/cart' element={<ProtectedRoute><Cart /></ProtectedRoute>} />
