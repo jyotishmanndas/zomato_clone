@@ -17,6 +17,7 @@ export interface Restaurant {
     description: string;
     image: string;
     phone: string;
+    ownerId: string;
     isVerified: boolean;
     autoLocation: {
         type: "Point",
@@ -24,4 +25,6 @@ export interface Restaurant {
         formattedAddress: string;
     };
     isOpen: boolean,
+    createdAt: Date,
+    updatedAt: Date
 }

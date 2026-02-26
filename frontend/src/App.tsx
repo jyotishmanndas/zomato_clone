@@ -15,6 +15,7 @@ import AuthLayout from './layouts/AuthLayout'
 import SellerRoute from './components/SellerRoute'
 import Account from './pages/Account'
 import RestaurantPage from './pages/RestaurantPage'
+import Cart from './pages/Cart'
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -38,8 +39,9 @@ const App = () => {
         <Route element={<AuthLayout />}>
           <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
           <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path='/account' element={<Account />} />
-          <Route path='/restaurant/:id' element={<RestaurantPage />} />
+          <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
+          <Route path='/restaurant/:id' element={<ProtectedRoute><RestaurantPage /></ProtectedRoute>} />
+          <Route path='/cart' element={<ProtectedRoute><Cart /></ProtectedRoute>} />
         </Route>
         <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
         <Route path='/restaurant' element={<SellerRoute><Restaurant /></SellerRoute>} />

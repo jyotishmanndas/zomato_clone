@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useRestaurantApi } from '../hooks/useRestaurantApi';
-import { Plus, Store, Utensils, Phone, MapPin, User, Package, Globe, Clock, X } from 'lucide-react';
+import { Plus, Store, Utensils, User, Package, X } from 'lucide-react';
 import { axiosInstance } from '../config/axiosInstance';
 import toast from 'react-hot-toast';
 import MenuForm from '../components/forms/MenuForm';
-import Menu from '../components/Menu/Menu';
 import { useNavigate } from 'react-router';
 import RestaurantProfile from '../components/RestaurantProfile';
+import { useMenuApi } from '../hooks/useMenuApi';
+import Menu from '../components/Menu/Menu';
 
 const Restaurant = () => {
     const { data, isLoading } = useRestaurantApi();
+    const { data: menus } = useMenuApi();
     const navigate = useNavigate();
 
     const [activeTab, setActiveTab] = useState('profile');
@@ -128,12 +130,16 @@ const Restaurant = () => {
                             <MenuForm restaurantId={restaurant._id} />
                         )}
 
-                        <Menu />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {menus.map((m: any) => (
+                                <Menu key={m.id} menu={m} isSeller={true} />
+                            ))}
+                        </div>
                     </div>
                 )}
 
                 {activeTab === 'profile' && (
-                   <RestaurantProfile restaurant={restaurant} />
+                    <RestaurantProfile restaurant={restaurant} />
                 )}
             </main>
         </div>
