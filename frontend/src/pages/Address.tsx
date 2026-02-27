@@ -29,11 +29,7 @@ interface Address {
     mobile: number;
 }
 
-const LocationPicker = ({
-    setLocation,
-}: {
-    setLocation: (lat: number, lng: number) => void;
-}) => {
+const LocationPicker = ({ setLocation}: { setLocation: (lat: number, lng: number) => void}) => {
     useMapEvents({
         click(e) {
             setLocation(e.latlng.lat, e.latlng.lng);

@@ -5,7 +5,8 @@ import authRoutes from "./routes/auth.routes";
 import restaurantRoutes from "./routes/restaurant.routes";
 import menuRoutes from "./routes/menu.routes";
 import cartRoutes from "./routes/cart.routes";
-import addressRoute from "./routes/address.routes"
+import addressRoutes from "./routes/address.routes";
+import orderRoutes from "./routes/order.routes";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/restaurant", restaurantRoutes);
 app.use("/api/v1/menu", menuRoutes);
 app.use("/api/v1/cart", cartRoutes);
-app.use("/api/v1/address", addressRoute);
+app.use("/api/v1/address", addressRoutes);
+app.use("/api/v1/order", orderRoutes)
 
 export default app;
