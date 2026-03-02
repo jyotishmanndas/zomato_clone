@@ -7,7 +7,7 @@ const router = Router();
 router.use(verifyJWT);
 
 router.post("/create", createOrder);
-router.get("/payment", fetchOrderForPayment);
+router.get("/payment/:id", fetchOrderForPayment);
 
 
 export default router
