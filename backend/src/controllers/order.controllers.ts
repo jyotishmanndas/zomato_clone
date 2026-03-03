@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { Address } from "../models/Address.model";
+import { Address } from "../models/address.model";
 import { Cart } from "../models/cart.models";
 import { Restaurant } from "../models/restaurant.models";
 import { Order } from "../models/order.model";
 
 export const createOrder = async (req: Request, res: Response) => {
     try {
-        const { paymentMethod, addressId, distance } = req.body;
+        const { paymentMethod, addressId } = req.body;
         if (!addressId) {
             return res.status(400).json({ msg: "Address is required" })
         };
@@ -17,6 +17,18 @@ export const createOrder = async (req: Request, res: Response) => {
         });
         if (!address) {
             return res.status(404).json({ success: false, msg: "Address not found" })
+        };
+
+        const getDistanceKm = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+            const R = 6371;
+            const dlat = ((lat2 - lat1) * Math.PI) / 180;
+            const dlon = ((lon2 - lon1) * Math.PI) / 180;
+
+            const a = Math.sin(dlat / 2) * Math.sin(dlat / 2) + Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dlon / 2) * Math.sin(dlon / 2);
+
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            return +(R * c).toFixed(2)
         };
 
         const cartItems = await Cart.findOne({
@@ -36,6 +48,13 @@ export const createOrder = async (req: Request, res: Response) => {
         if (!restaurant.isOpen) {
             return res.status(404).json({ msg: "Sorry this restaurant is closed for now" })
         };
+
+        const distance = getDistanceKm(
+            address.location.coordinates[1],
+            address.location.coordinates[0],
+            restaurant.autoLocation.coordinates[1],
+            restaurant.autoLocation.coordinates[0]
+        );
 
         let subtotal = 0;
 
@@ -64,11 +83,11 @@ export const createOrder = async (req: Request, res: Response) => {
 
         const [longitude, latitude] = address.location.coordinates;
 
-        const riderAmount = Math.ceil(distance) * 17;
+        const riderAmount = Math.round(distance * 17);
 
         const order = await Order.create({
             userId: req.user?._id,
-            restaurantId: restaurant._id.toString(),
+            restaurantId: restaurant._id,
             restaurantName: restaurant.name,
             riderId: null,
             distance,
@@ -87,11 +106,9 @@ export const createOrder = async (req: Request, res: Response) => {
             },
             paymentMethod,
             paymentStatus: "pending",
-            status: "placed",
+            status: "pending",
             expiresAt
-        })
-
-        await Cart.deleteOne({ ownerId: req.user?._id })
+        });
 
         return res.status(200).json({
             success: true,
@@ -99,36 +116,35 @@ export const createOrder = async (req: Request, res: Response) => {
             orderId: order._id,
             amount: totalAmount
         })
-
     } catch (error) {
         console.log("Error while create order", error);
         return res.status(500).json({ msg: "Internal server error" })
     }
 };
 
-export const fetchOrderForPayment = async (req: Request, res: Response) => {
-    try {
-        if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {
-            return res.status(403).json({ msg: "Forbidden" })
-        };
+// export const fetchOrderForPayment = async (req: Request, res: Response) => {
+//     try {
+//         if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {
+//             return res.status(403).json({ msg: "Forbidden" })
+//         };
 
-        const order = await Order.findById(req.params.id);
-        if (!order) {
-            return res.status(404).json({ msg: "Order not found" })
-        };
+//         const order = await Order.findById(req.params.id);
+//         if (!order) {
+//             return res.status(404).json({ msg: "Order not found" })
+//         };
 
-        if (order.paymentStatus !== "pending") {
-            return res.status(400).json({ msg: "Order already paid" })
-        };
+//         if (order.paymentStatus !== "pending") {
+//             return res.status(400).json({ msg: "Order already paid" })
+//         };
 
-        return res.json({
-            orderId: order._id,
-            amount: order.total,
-            currency: "INR"
-        })
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ msg: "Internal server error" })
-    }
-};
+//         return res.json({
+//             orderId: order._id,
+//             amount: order.total,
+//             currency: "INR"
+//         })
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({ msg: "Internal server error" })
+//     }
+// };
 

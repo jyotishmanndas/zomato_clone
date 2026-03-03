@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema, Types } from "mongoose";
 
-type Status = "placed" | "accepted" | "preparing" | "ready_for_rider" | "rider_assigned" | "picked_up" | "delivered" | "cancelled"
+type Status = "confirmed" | "pending" | "accepted" | "preparing" | "ready_for_rider" | "rider_assigned" | "picked_up" | "delivered" | "cancelled"
 
 type PaymentStatus = "pending" | "paid" | "failed"
 
@@ -13,7 +13,7 @@ interface Items {
 
 export interface IOrder extends Document {
     userId: Types.ObjectId;
-    restaurantId: string;
+    restaurantId: Types.ObjectId;
     restaurantName: string;
     riderId?: string | null;
     riderPhone: number | null;
@@ -39,6 +39,7 @@ export interface IOrder extends Document {
 
     status: Status
 
+    paymentId?: string;
     paymentMethod: "razorpay";
     paymentStatus: PaymentStatus;
 
@@ -55,7 +56,8 @@ const orderSchema = new Schema<IOrder>({
         required: true
     },
     restaurantId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant",
         required: true
     },
     restaurantName: {
@@ -120,10 +122,13 @@ const orderSchema = new Schema<IOrder>({
 
     status: {
         type: String,
-        enum: ["placed", "accepted", "preparing", "ready_for_rider", "rider_assigned", "picked_up", "delivered", "cancelled"],
-        default: "placed"
+        enum: ["confirmed", "pending", "accepted", "preparing", "ready_for_rider", "rider_assigned", "picked_up", "delivered", "cancelled"],
+        default: "pending"
     },
 
+    paymentId: {
+        type: String,
+    },
     paymentMethod: {
         type: String,
         enum: ["razorpay"],

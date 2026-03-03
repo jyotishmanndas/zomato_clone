@@ -29,7 +29,7 @@ interface Address {
     mobile: number;
 }
 
-const LocationPicker = ({ setLocation}: { setLocation: (lat: number, lng: number) => void}) => {
+const LocationPicker = ({ setLocation }: { setLocation: (lat: number, lng: number) => void }) => {
     useMapEvents({
         click(e) {
             setLocation(e.latlng.lat, e.latlng.lng);
@@ -89,10 +89,12 @@ const Address = () => {
     // 🌍 Reverse geocoding
     const fetchFormattedAddress = async (lat: number, lng: number) => {
         try {
-            const res = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+            const { data } = await axiosInstance.get(
+                `/api/v1/location/reverse`,
+                {
+                    params: { lat, lng },
+                }
             );
-            const data = await res.json();
             setFormattedAddress(data.display_name || "");
         } catch {
             toast.error("Failed to fetch address");
@@ -137,7 +139,7 @@ const Address = () => {
                 {
                     formattedAddress,
                     mobile,
-                    location:{
+                    location: {
                         type: "Point",
                         coordinates: [latitude, longitude]
                     }

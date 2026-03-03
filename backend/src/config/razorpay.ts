@@ -7,7 +7,6 @@ export const razorpay = new Razorpay({
 });
 
 
-
 export const verifyRazorpaySignature = (orderId: string, paymentId: string, signature: string) => {
 
     const body = `${orderId}|${paymentId}`
@@ -18,4 +17,4 @@ export const verifyRazorpaySignature = (orderId: string, paymentId: string, sign
         .digest("hex");
 
     return expectedSignature === signature;
-}
+};

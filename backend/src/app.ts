@@ -7,7 +7,8 @@ import menuRoutes from "./routes/menu.routes";
 import cartRoutes from "./routes/cart.routes";
 import addressRoutes from "./routes/address.routes";
 import orderRoutes from "./routes/order.routes";
-import paymentRoutes from "./routes/payment.routes"
+import paymentRoutes from "./routes/payment.routes";
+import locationRoutes from "./routes/location.routes";
 
 const app = express();
 
@@ -27,5 +28,6 @@ app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/address", addressRoutes);
 app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/payment", paymentRoutes);
+app.use("/api/v1/location", locationRoutes);
 
 export default app;

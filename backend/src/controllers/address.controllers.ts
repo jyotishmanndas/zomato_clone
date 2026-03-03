@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { addressSchema } from "../validations/address.validation";
 import mongoose from "mongoose";
-import { Address } from "../models/Address.model";
+import { Address } from "../models/address.model";
 
 export const addAddress = async (req: Request, res: Response) => {
     try {

@@ -17,6 +17,7 @@ import Account from './pages/Account'
 import RestaurantPage from './pages/RestaurantPage'
 import Cart from './pages/Cart'
 import Address from './pages/Address'
+import Checkout from './pages/Checkout'
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +45,7 @@ const App = () => {
           <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
           <Route path='/restaurant/:id' element={<ProtectedRoute><RestaurantPage /></ProtectedRoute>} />
           <Route path='/cart' element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+          <Route path='/checkout' element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
         </Route>
         <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
         <Route path='/restaurant' element={<SellerRoute><Restaurant /></SellerRoute>} />

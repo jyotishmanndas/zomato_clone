@@ -1,3 +1,4 @@
+import { Cart } from "../models/cart.models";
 import { Order } from "../models/order.model";
 import { getChannel } from "./rabbitmq";
 
@@ -14,7 +15,7 @@ export const startPaymentConsumer = async () => {
                 return;
             };
 
-            const { orderId } = event.data;
+            const { orderId, paymentId } = event.data;
             const order = await Order.findOneAndUpdate(
                 {
                     _id: orderId,
@@ -25,7 +26,8 @@ export const startPaymentConsumer = async () => {
                 {
                     $set: {
                         paymentStatus: "paid",
-                        status: "placed"
+                        status: "confirmed",
+                        paymentId: paymentId
                     },
                     $unset: {
                         expiresAt: 1
@@ -36,6 +38,8 @@ export const startPaymentConsumer = async () => {
                 channel.ack(msg);
                 return
             };
+
+            await Cart.deleteOne({ ownerId: order.userId })
 
             console.log("Order placed: ", order._id);
             channel.ack(msg);

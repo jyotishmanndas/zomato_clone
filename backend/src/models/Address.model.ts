@@ -43,4 +43,4 @@ const addressSchema = new Schema<IAddress>({
 
 addressSchema.index({ location: "2dsphere" })
 
-export const Address:Model<IAddress> = mongoose.model("Address", addressSchema);
+export const Address: Model<IAddress> = mongoose.model("Address", addressSchema);
