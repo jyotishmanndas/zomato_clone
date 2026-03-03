@@ -31,7 +31,7 @@ export const verifyJWT = async (req: Request, res: Response, next: NextFunction)
 
         const user = await User.findById(decoded.userId).select("-refreshToken");
         if (!user) {
-            return res.status(401).json({ msg: "user not found" })
+            return res.status(401).json({ msg: "Unauthorized" })
         };
 
         req.user = user

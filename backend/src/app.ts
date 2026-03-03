@@ -1,3 +1,4 @@
+import { createServer } from "http"
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -9,8 +10,10 @@ import addressRoutes from "./routes/address.routes";
 import orderRoutes from "./routes/order.routes";
 import paymentRoutes from "./routes/payment.routes";
 import locationRoutes from "./routes/location.routes";
+import { initSocket } from "./socket/socket";
 
 const app = express();
+const server = createServer(app);
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
@@ -21,6 +24,8 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16b" }))
 app.use(cookieParser());
 
+initSocket(server);
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/restaurant", restaurantRoutes);
 app.use("/api/v1/menu", menuRoutes);
@@ -30,4 +35,4 @@ app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/location", locationRoutes);
 
-export default app;
+export default server;

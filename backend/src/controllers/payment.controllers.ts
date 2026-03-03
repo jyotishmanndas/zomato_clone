@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { razorpay, verifyRazorpaySignature } from "../config/razorpay";
-import { publishPaymentSuccess } from "../config/payment.producer";
+import { publishPaymentSuccess } from "../rabbitmq/payment.producer";
 import { Order } from "../models/order.model";
+
 
 export const createRazorpayOrder = async (req: Request, res: Response) => {
     try {

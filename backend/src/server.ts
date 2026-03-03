@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { connectDB } from "./db/db";
-import app from "./app";
-import { connectRabbitMQ } from "./config/rabbitmq";
-import { startPaymentConsumer } from "./config/payment.consumer";
+import { connectRabbitMQ } from "./rabbitmq/rabbitmq";
+import { startPaymentConsumer } from "./rabbitmq/payment.consumer";
+import server from "./app";
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,7 +16,7 @@ const startServer = async () => {
 
         await startPaymentConsumer();
 
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log(`Server is running on the port ${PORT}`);
         })
     } catch (error) {
