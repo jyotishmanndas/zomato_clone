@@ -3,6 +3,9 @@ import { Address } from "../models/address.model";
 import { Cart } from "../models/cart.models";
 import { Restaurant } from "../models/restaurant.models";
 import { Order } from "../models/order.model";
+import mongoose from "mongoose";
+import { updateOrderStatusSchema } from "../validations/order.validation";
+import { getIO } from "../socket/socket";
 
 export const createOrder = async (req: Request, res: Response) => {
     try {
@@ -148,3 +151,135 @@ export const createOrder = async (req: Request, res: Response) => {
 //     }
 // };
 
+
+export const fetchedRestaurantOrders = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "seller") {
+            return res.status(403).json({ msg: "Forbidden: seller role required" })
+        };
+
+        const { restaurantId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(restaurantId as string)) {
+            return res.status(400).json({ msg: "Invalid restaurant Id format" })
+        };
+
+        const limit = Number(req.query.limit) || 10;
+        const page = Number(req.query.page) | 1;
+
+        const skip = (page - 1) * limit;
+
+        const orders = await Order.find({
+            restaurantId,
+            paymentStatus: "paid"
+        })
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .skip(skip)
+
+        return res.json(200).json({ success: true, count: orders.length, orders })
+    } catch (error) {
+        console.log("Error while fetching orders", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+};
+
+export const updateOrderStatus = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "seller") {
+            return res.status(403).json({ msg: "Forbidden: seller role required" })
+        };
+
+        const { orderId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(orderId as string)) {
+            return res.status(400).json({ msg: "Invalid order Id format" })
+        };
+
+        const parsed = updateOrderStatusSchema.safeParse(req.body);
+        if (!parsed.success) {
+            return res.status(400).json({ success: true, msg: "Invalid inputs", error: parsed.error.issues })
+        };
+
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ msg: "order not found" })
+        };
+
+        if (order.paymentStatus !== "paid") {
+            return res.status(400).json({ msg: "order not completed" })
+        };
+
+        const restaurant = await Restaurant.findById(order.restaurantId);
+        if (!restaurant) {
+            return res.status(404).json({ msg: "Restaurant not found" })
+        };
+
+        if (req.user._id.toString() !== restaurant.ownerId.toString()) {
+            return res.status(401).json({ msg: "You are not allowed to update this user" })
+        };
+
+        order.status = parsed.data.status;
+        await order.save();
+
+        const io = getIO();
+
+        io.to(`user:${order.userId}`).emit("order:update", { orderId: order._id, status: order.status })
+
+        return res.status(200).json({ success: true, msg: "order status updated successfully", order })
+    } catch (error) {
+        console.log("Error while update orders", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+};
+
+export const getMyOrders = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "customer") {
+            return res.status(403).json({ msg: "Forbidden: customer role required" })
+        };
+
+        const limit = Number(req.query.limit) || 10;
+        const page = Number(req.query.page) | 1;
+
+        const skip = (page - 1) * limit;
+
+        const orders = await Order.find({
+            userId: req.user?._id,
+            paymentStatus: "paid"
+        })
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .skip(skip)
+
+        return res.json(200).json({ success: true, orders })
+    } catch (error) {
+        console.log("Error while fetching orders for customer", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+};
+
+export const fetchedSingleOrder = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "customer") {
+            return res.status(403).json({ msg: "Forbidden: customer role required" })
+        };
+
+        const { orderId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(orderId as string)) {
+            return res.status(400).json({ msg: "Invalid order Id format" })
+        };
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ msg: "order not found" })
+        };
+
+        if (order.userId.toString() !== req.user?._id.toString()) {
+            return res.status(401).json({ msg: "You are not allowed to view this order" })
+        }
+
+        return res.json(200).json({ success: true, order })
+    } catch (error) {
+        console.log("Error while fetching single order for customer", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+}

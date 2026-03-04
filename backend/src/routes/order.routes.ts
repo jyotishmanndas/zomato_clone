@@ -1,12 +1,16 @@
 import { Router } from "express";
 import { verifyJWT } from "../middleware/auth.middleware";
-import { createOrder } from "../controllers/order.controllers";
+import { createOrder, fetchedRestaurantOrders, fetchedSingleOrder, getMyOrders, updateOrderStatus } from "../controllers/order.controllers";
 
 const router = Router();
 
 router.use(verifyJWT);
 
 router.post("/create", createOrder);
+router.get("/:restaurantId", fetchedRestaurantOrders);
+router.patch("/update/:orderId", updateOrderStatus);
+router.get("/getOrders", getMyOrders);
+router.get("/get/:orderId", fetchedSingleOrder);
 // router.get("/payment/:id", fetchOrderForPayment);
 
 
