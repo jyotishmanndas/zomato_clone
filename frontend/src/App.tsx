@@ -18,12 +18,14 @@ import RestaurantPage from './pages/RestaurantPage'
 import Cart from './pages/Cart'
 import Address from './pages/Address'
 import Checkout from './pages/Checkout'
+import { useSocket } from './hooks/useSocket'
 
 const App = () => {
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector(state => state.auth);
 
-  useGeolocation()
+  useGeolocation();
+  useSocket();
 
   useEffect(() => {
     axiosInstance.get(`/api/v1/auth/user/profile`)

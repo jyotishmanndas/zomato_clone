@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import cookie from "cookie";
+import * as cookie from "cookie";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.models";
 
@@ -27,9 +27,10 @@ export const socketAuthMiddleware = async (socket: Socket, next: (err?: Error) =
             return next(new Error("Unauthorized"))
         }
 
-        socket.data.user = decoded.userId;
+        socket.data.user = user;
         next()
     } catch (error) {
+        console.log("Socket auth failed", error);
         next(new Error("Authentication failed"));
     }
 };

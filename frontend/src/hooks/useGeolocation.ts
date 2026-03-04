@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAppDispatch } from './useRedux';
 import { setCity, setLocation } from '../features/locationSlice';
+import { axiosInstance } from '../config/axiosInstance';
 
 export const useGeolocation = () => {
     const dispatch = useAppDispatch();
@@ -12,8 +13,12 @@ export const useGeolocation = () => {
             const { latitude, longitude } = position.coords;
 
             try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-                const data = await res.json();
+                const { data } = await axiosInstance.get(
+                    `/api/v1/location/reverse`,
+                    {
+                        params: { lat: latitude, lng: longitude },
+                    }
+                );
 
                 dispatch(setLocation({
                     latitude,
