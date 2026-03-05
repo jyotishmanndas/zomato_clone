@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRestaurantApi } from '../hooks/useRestaurantApi';
-import { Plus, Store, Utensils, User, Package, X } from 'lucide-react';
+import { Plus, Store, Utensils, User, Package, X, PackageOpen, Package2 } from 'lucide-react';
 import { axiosInstance } from '../config/axiosInstance';
 import toast from 'react-hot-toast';
 import MenuForm from '../components/forms/MenuForm';
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router';
 import RestaurantProfile from '../components/RestaurantProfile';
 import { useMenuApi } from '../hooks/useMenuApi';
 import Menu from '../components/Menu/Menu';
+import RestaurantOrders from '../components/RestaurantOrders';
 
 const Restaurant = () => {
     const { data, isLoading } = useRestaurantApi();
@@ -108,6 +109,12 @@ const Restaurant = () => {
                     >
                         <Package size={18} /> Menu Items
                     </button>
+                    <button
+                        onClick={() => setActiveTab('orders')}
+                        className={`py-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 ${activeTab === 'orders' ? 'border-red-500 text-red-500' : 'border-transparent text-slate-400'}`}
+                    >
+                        <Package2 size={18} /> Orders
+                    </button>
                 </div>
             </div>
 
@@ -140,6 +147,10 @@ const Restaurant = () => {
 
                 {activeTab === 'profile' && (
                     <RestaurantProfile restaurant={restaurant} />
+                )}
+
+                {activeTab === 'orders' && (
+                    <RestaurantOrders restaurantId={restaurant._id} />
                 )}
             </main>
         </div>

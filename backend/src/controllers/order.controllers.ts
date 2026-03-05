@@ -176,7 +176,7 @@ export const fetchedRestaurantOrders = async (req: Request, res: Response) => {
             .limit(limit)
             .skip(skip)
 
-        return res.json(200).json({ success: true, count: orders.length, orders })
+        return res.status(200).json({ success: true, count: orders.length, orders })
     } catch (error) {
         console.log("Error while fetching orders", error);
         return res.status(500).json({ msg: "Internal server error" })

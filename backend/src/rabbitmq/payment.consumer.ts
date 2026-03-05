@@ -1,5 +1,6 @@
 import { Cart } from "../models/cart.models";
 import { Order } from "../models/order.model";
+import { getIO } from "../socket/socket";
 import { getChannel } from "./rabbitmq";
 
 export const startPaymentConsumer = async () => {
@@ -39,7 +40,10 @@ export const startPaymentConsumer = async () => {
                 return
             };
 
-            await Cart.deleteOne({ ownerId: order.userId })
+            await Cart.deleteOne({ ownerId: order.userId });
+
+            const io = getIO();
+            io.to(`restaurant:${order.restaurantId}`).emit("order:new", order)
 
             console.log("Order placed: ", order._id);
             channel.ack(msg);

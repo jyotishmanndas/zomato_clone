@@ -28,3 +28,54 @@ export interface Restaurant {
     createdAt: Date,
     updatedAt: Date
 }
+
+export const ACTIVE_STATUSES = ["confirmed", "accepted", "preparing", "ready_for_rider", "rider_assigned", "picked_up"]
+
+type Status = "confirmed" | "pending" | "accepted" | "preparing" | "ready_for_rider" | "rider_assigned" | "picked_up" | "delivered" | "cancelled"
+
+type PaymentStatus = "pending" | "paid" | "failed"
+
+interface Items {
+    ItemId: string;
+    name: string;
+    price: number;
+    quantity: number
+}
+
+export interface IOrder {
+    _id:string;
+    userId: string;
+    restaurantId: string;
+    restaurantName: string;
+    riderId?: string | null;
+    riderPhone: number | null;
+    riderName: string | null;
+    distance: number;
+    riderAmount: number;
+
+    items: Items[];
+
+    subtotal: number;
+    deliveryFee: number;
+    tax: number;
+    total: number;
+
+    addressId: string;
+
+    deliveryAddress: {
+        formattedAddress: string;
+        mobile: number;
+        latitude: number;
+        longitude: number
+    };
+
+    status: Status
+
+    paymentId?: string;
+    paymentMethod: "razorpay";
+    paymentStatus: PaymentStatus;
+
+    expiresAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+};
