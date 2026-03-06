@@ -201,7 +201,7 @@ const Checkout = () => {
             <div className='rounded-xl bg-white p-4 shadow-sm space-y-3'>
                 <h3 className='font-semibold'>Payment Method</h3>
 
-                <button disabled={!selectedAddressId}
+                <button disabled={!selectedAddressId && !restaurant?.isOpen}
                 onClick={payWithRazorpay}                
                 className='w-full flex items-center justify-center gap-3 rounded-lg bg-blue-500 py-3 font-semibold text-white disabled:opacity-50'>
                     <CreditCard size={18} />

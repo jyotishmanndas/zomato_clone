@@ -19,6 +19,7 @@ import Cart from './pages/Cart'
 import Address from './pages/Address'
 import Checkout from './pages/Checkout'
 import { useSocket } from './hooks/useSocket'
+import OrderPage from './pages/OrderPage'
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -45,6 +46,7 @@ const App = () => {
           <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path='/address' element={<ProtectedRoute><Address /></ProtectedRoute>} />
           <Route path='/account' element={<ProtectedRoute><Account /></ProtectedRoute>} />
+          <Route path='/order/:id' element={<ProtectedRoute><OrderPage /></ProtectedRoute>} />
           <Route path='/restaurant/:id' element={<ProtectedRoute><RestaurantPage /></ProtectedRoute>} />
           <Route path='/cart' element={<ProtectedRoute><Cart /></ProtectedRoute>} />
           <Route path='/checkout' element={<ProtectedRoute><Checkout /></ProtectedRoute>} />

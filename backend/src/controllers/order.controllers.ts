@@ -239,7 +239,7 @@ export const getMyOrders = async (req: Request, res: Response) => {
         };
 
         const limit = Number(req.query.limit) || 10;
-        const page = Number(req.query.page) | 1;
+        const page = Number(req.query.page) || 1;
 
         const skip = (page - 1) * limit;
 
@@ -251,7 +251,7 @@ export const getMyOrders = async (req: Request, res: Response) => {
             .limit(limit)
             .skip(skip)
 
-        return res.json(200).json({ success: true, orders })
+        return res.status(200).json({ success: true, orders })
     } catch (error) {
         console.log("Error while fetching orders for customer", error);
         return res.status(500).json({ msg: "Internal server error" })
@@ -277,7 +277,7 @@ export const fetchedSingleOrder = async (req: Request, res: Response) => {
             return res.status(401).json({ msg: "You are not allowed to view this order" })
         }
 
-        return res.json(200).json({ success: true, order })
+        return res.status(200).json({ success: true, order })
     } catch (error) {
         console.log("Error while fetching single order for customer", error);
         return res.status(500).json({ msg: "Internal server error" })

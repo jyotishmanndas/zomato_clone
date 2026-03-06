@@ -7,10 +7,13 @@ const router = Router();
 router.use(verifyJWT);
 
 router.post("/create", createOrder);
-router.get("/:restaurantId", fetchedRestaurantOrders);
-router.patch("/update/:orderId", updateOrderStatus);
 router.get("/getOrders", getMyOrders);
 router.get("/get/:orderId", fetchedSingleOrder);
+
+router.patch("/update/:orderId", updateOrderStatus);
+
+router.get("/:restaurantId", fetchedRestaurantOrders);
+
 // router.get("/payment/:id", fetchOrderForPayment);
 
 
