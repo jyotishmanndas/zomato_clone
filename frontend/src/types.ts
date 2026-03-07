@@ -79,3 +79,14 @@ export interface IOrder {
     createdAt: Date;
     updatedAt: Date;
 };
+
+
+export interface IRider {
+    _id:string
+    picture: string;
+    mobile: string;
+    aadhaarNumber: string;
+    drivingLicenceNumber: string;
+    isVerified: boolean;
+    isAvailable:boolean
+}

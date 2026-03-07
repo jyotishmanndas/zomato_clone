@@ -10,6 +10,7 @@ import addressRoutes from "./routes/address.routes";
 import orderRoutes from "./routes/order.routes";
 import paymentRoutes from "./routes/payment.routes";
 import locationRoutes from "./routes/location.routes";
+import riderRoutes from "./routes/rider.routes";
 import { initSocket } from "./socket/socket";
 
 const app = express();
@@ -34,5 +35,6 @@ app.use("/api/v1/address", addressRoutes);
 app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/location", locationRoutes);
+app.use("/api/v1/rider", riderRoutes);
 
 export default server;

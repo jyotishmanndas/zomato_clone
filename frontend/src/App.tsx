@@ -20,6 +20,7 @@ import Address from './pages/Address'
 import Checkout from './pages/Checkout'
 import { useSocket } from './hooks/useSocket'
 import OrderPage from './pages/OrderPage'
+import RiderDashboard from './pages/RiderDashboard'
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -54,6 +55,7 @@ const App = () => {
         <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
         <Route path='/restaurant' element={<SellerRoute><Restaurant /></SellerRoute>} />
         <Route path='/create-restaurant' element={<SellerRoute><AddRestaurantForm /></SellerRoute>} />
+        <Route path='/rider' element={<RiderDashboard />} />
       </Routes>
     </>
   )

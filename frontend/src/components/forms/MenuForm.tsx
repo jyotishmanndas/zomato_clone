@@ -42,10 +42,9 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
         formData.append("name", data.name);
         formData.append("price", String(data.price));
         formData.append("isAvailable", JSON.stringify(data.isAvailable));
-
         if (data.description) {
             formData.append("description", data.description);
-        }
+        };
 
         formData.append("menuImg", data.image);
 

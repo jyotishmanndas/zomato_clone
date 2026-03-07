@@ -9,7 +9,16 @@ export const addRiderProfile = async (req: Request, res: Response) => {
             return res.status(401).json({ msg: "Forbidden:, rider role is required" })
         };
 
-        const parsed = riderSchema.safeParse(req.body);
+        const body = { ...req.body };
+        if (typeof body.location === "string") {
+            try {
+                body.location = JSON.parse(body.location)
+            } catch (error) {
+                body.location = req.body.location
+            }
+        }
+
+        const parsed = riderSchema.safeParse(body);
         if (!parsed.success) {
             return res.status(400).json({ success: false, msg: "Invalid inputs", error: parsed.error.issues })
         }
@@ -92,14 +101,14 @@ export const toogleRiderAvailability = async (req: Request, res: Response) => {
             return res.status(401).json({ msg: "Forbidden:, rider role is required" })
         };
 
-        const {isAvailable, latitude, longitude} = req.body;
+        const { isAvailable, latitude, longitude } = req.body;
 
-        if(typeof isAvailable !== "boolean"){
-            return res.status(400).json({msg: "isAvailaible must be boolean"})
+        if (typeof isAvailable !== "boolean") {
+            return res.status(400).json({ msg: "isAvailaible must be boolean" })
         };
 
-        if(latitude === undefined || longitude === undefined){
-            return res.status(400).json({msg: "Location is required"})
+        if (latitude === undefined || longitude === undefined) {
+            return res.status(400).json({ msg: "Location is required" })
         };
 
         const rider = await Rider.findOne({
@@ -109,8 +118,8 @@ export const toogleRiderAvailability = async (req: Request, res: Response) => {
             return res.status(404).json({ msg: "rider profile not found" })
         };
 
-        if(isAvailable && !rider.isVerified){
-            return res.status(403).json({msg: "Rider is not verified"})
+        if (isAvailable && !rider.isVerified) {
+            return res.status(403).json({ msg: "Rider is not verified" })
         };
 
         rider.isAvailable = isAvailable;
@@ -118,10 +127,10 @@ export const toogleRiderAvailability = async (req: Request, res: Response) => {
             type: "Point",
             coordinates: [longitude, latitude]
         },
-        rider.lastActiveAt = new Date();
+            rider.lastActiveAt = new Date();
         await rider.save();
 
-        return res.status(200).json({ msg: isAvailable ? "Rider is now online" : "Rider is now offline", rider})
+        return res.status(200).json({ msg: isAvailable ? "Rider is now online" : "Rider is now offline", rider })
     } catch (error) {
         console.log("Error while toogle rider profile", error);
         return res.status(500).json({ msg: "Internal server error" })
