@@ -6,6 +6,8 @@ import { Order } from "../models/order.model";
 import mongoose from "mongoose";
 import { updateOrderStatusSchema } from "../validations/order.validation";
 import { getIO } from "../socket/socket";
+import { publishEvent } from "../rabbitmq/order.producer";
+import { Rider } from "../models/rider.model";
 
 export const createOrder = async (req: Request, res: Response) => {
     try {
@@ -125,33 +127,6 @@ export const createOrder = async (req: Request, res: Response) => {
     }
 };
 
-// export const fetchOrderForPayment = async (req: Request, res: Response) => {
-//     try {
-//         if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {
-//             return res.status(403).json({ msg: "Forbidden" })
-//         };
-
-//         const order = await Order.findById(req.params.id);
-//         if (!order) {
-//             return res.status(404).json({ msg: "Order not found" })
-//         };
-
-//         if (order.paymentStatus !== "pending") {
-//             return res.status(400).json({ msg: "Order already paid" })
-//         };
-
-//         return res.json({
-//             orderId: order._id,
-//             amount: order.total,
-//             currency: "INR"
-//         })
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({ msg: "Internal server error" })
-//     }
-// };
-
-
 export const fetchedRestaurantOrders = async (req: Request, res: Response) => {
     try {
         if (req.user?.role !== "seller") {
@@ -223,7 +198,17 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 
         const io = getIO();
 
-        io.to(`user:${order.userId}`).emit("order:update", { orderId: order._id, status: order.status })
+        io.to(`user:${order.userId}`).emit("order:update", { orderId: order._id, status: order.status });
+
+        if (order.status === "ready_for_rider") {
+            await publishEvent("ORDER_READY_FOR_RIDER", {
+                orderId: order._id,
+                restaurantId: restaurant._id,
+                location: restaurant.autoLocation
+            });
+
+            console.log("Event published successfully");
+        };
 
         return res.status(200).json({ success: true, msg: "order status updated successfully", order })
     } catch (error) {
@@ -280,6 +265,104 @@ export const fetchedSingleOrder = async (req: Request, res: Response) => {
         return res.status(200).json({ success: true, order })
     } catch (error) {
         console.log("Error while fetching single order for customer", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+};
+
+export const getCurrentOrdersForRiders = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "rider") {
+            return res.status(403).json({ msg: "Forbidden: rider role required" })
+        };
+
+        // const { riderId } = req.params;
+        // if (!mongoose.Types.ObjectId.isValid(riderId as string)) {
+        //     return res.status(400).json({ msg: "Invalid rider Od format" })
+        // };
+
+        const rider = await Rider.findOne({
+            userId: req.user?._id,
+            isVerified: true,
+            isAvailable: true
+        });
+        if (!rider) {
+            return res.status(404).json({ msg: "rider not found" })
+        };
+
+        const order = await Order.find({
+            riderId: rider.userId.toString(),
+            status: {
+                $ne: "delivered"
+            }
+        })
+            .populate("restaurantId");
+
+        if (!order) {
+            return res.status(404).json({ msg: "order not found" })
+        };
+
+        return res.status(200).json({ msg: "rider current order fetched successfully", order })
+
+    } catch (error) {
+        console.log("Error while fetching rider current order", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+};
+
+export const updateOrderStatusForRider = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "rider") {
+            return res.status(403).json({ msg: "Forbidden: rider role required" })
+        };
+
+        const rider = await Rider.findOne({
+            userId: req.user?._id,
+            isVerified: true,
+            isAvailable: true
+        });
+        if (!rider) {
+            return res.status(404).json({ msg: "rider not found" })
+        };
+
+        const { orderId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(orderId as string)) {
+            return res.status(400).json({ msg: "Invalid order id format" })
+        };
+
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ msg: "order not found" })
+        };
+
+        if (req.user._id.toString() !== order.riderId?.toString()) {
+            return res.status(400).json({ msg: "Your are not allowed to update status" })
+        }
+
+        if (order.status === "rider_assigned") {
+            order.status = "picked_up"
+            await order.save()
+
+            const io = getIO();
+
+            io.to(`user:${order.userId}`).emit("order:rider_assigned", order);
+
+            io.to(`restaurant:${order.restaurantId}`).emit("order:rider_assigned", order);
+        }
+
+        if (order.status === "picked_up") {
+            order.status = "delivered"
+            await order.save()
+
+            const io = getIO();
+
+            io.to(`user:${order.userId}`).emit("order:rider_assigned", order);
+
+            io.to(`restaurant:${order.restaurantId}`).emit("order:rider_assigned", order);
+        }
+
+        return res.status(200).json({ msg: "Order updated successfully", order })
+    } catch (error) {
+        console.log("Error while updating current order", error);
         return res.status(500).json({ msg: "Internal server error" })
     }
 }

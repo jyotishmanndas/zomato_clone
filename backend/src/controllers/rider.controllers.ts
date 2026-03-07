@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { imageSchema, riderSchema } from "../validations/rider.validation";
 import { uploadtoIK } from "../utils/imagekit";
 import { Rider } from "../models/rider.model";
+import axios from "axios";
+import mongoose from "mongoose";
+import { Order } from "../models/order.model";
+import { getIO } from "../socket/socket";
 
 export const addRiderProfile = async (req: Request, res: Response) => {
     try {
@@ -136,3 +140,53 @@ export const toogleRiderAvailability = async (req: Request, res: Response) => {
         return res.status(500).json({ msg: "Internal server error" })
     }
 };
+
+export const accepOrder = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "rider") {
+            return res.status(403).json({ msg: "Forbidden: rider role required" })
+        };
+
+        const { orderId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(orderId as string)) {
+            return res.status(400).json({ msg: "Order id is not valid" })
+        };
+
+        const rider = await Rider.findOne({
+            userId: req.user?._id,
+            isVerified: true,
+            isAvailable: true
+        });
+        if (!rider) {
+            return res.status(404).json({ msg: "rider not found" })
+        };
+
+        const order = await Order.findOneAndUpdate(
+            { _id: orderId, riderId: null },
+            {
+                riderId: rider.userId,
+                riderName: req.user?.name,
+                riderPhone: rider.mobile,
+                status: "rider_assigned"
+            }
+        );
+        if (!order) {
+            return res.status(404).json({ msg: "Order not found" })
+        };
+
+        await Rider.findByIdAndUpdate(rider._id, {
+            isAvailable:false
+        })
+
+        const io = getIO();
+
+        io.to(`user:${order.userId}`).emit("order:rider_assigned", order);
+
+        io.to(`restaurant:${order.restaurantId}`).emit("order:rider_assigned", order);
+
+        return res.status(200).json({ success: true, msg: "Rider assigned successfully", order })
+    } catch (error) {
+        console.log("Error while riser assign", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+}
