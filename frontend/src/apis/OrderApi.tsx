@@ -14,3 +14,8 @@ export const fetchedSingleCustomerOrders = async (orderId: string) => {
     const res = await axiosInstance.get(`/api/v1/order/get/${orderId}`);
     return res.data.order
 };
+
+export const fetchedRiderOrders = async () => {
+    const res = await axiosInstance.get(`/api/v1/order/getRiderOrders`);
+    return res.data.order
+}

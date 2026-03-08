@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useCustomerSingleOrderApi } from '../hooks/useOrderApi'
 import { useSocket } from '../hooks/useSocket';
@@ -21,9 +21,11 @@ const OrderPage = () => {
       });
     };
     socket.on("order:update", onOrderUpdate);
+    socket.off("order:rider_assigned", onOrderUpdate)
 
     return () => {
-      socket.off("order:update", onOrderUpdate)
+      socket.off("order:update", onOrderUpdate);
+      socket.off("order:rider_assigned", onOrderUpdate)
     };
 
   }, [socketRef])

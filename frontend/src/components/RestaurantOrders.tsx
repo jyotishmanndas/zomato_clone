@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import audio from "../assets/resAudio.mp3";
 import { useOrderApi } from '../hooks/useOrderApi';
 import { useSocket } from '../hooks/useSocket';
@@ -55,6 +55,32 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
         };
 
     }, [socketRef, audioUnlocked, restaurantId, queryClient])
+
+    useEffect(() => {
+        const socket = socketRef.current;
+        if (!socket) return;
+
+        const onOrderUpdate = () => {
+            if (socket && audioRef.current) {
+                audioRef.current.currentTime = 0;
+                audioRef.current.play().catch((err) => {
+                    console.log("Audio failed to play", err);
+                })
+            };
+
+            queryClient.invalidateQueries({
+                queryKey: ["orders", restaurantId]
+            });
+        };
+
+        socket.on("order:rider_assigned", onOrderUpdate);
+
+        return () => {
+            socket.off("order:rider_assigned", onOrderUpdate)
+        };
+
+    }, [socketRef, restaurantId, queryClient])
+
 
     if (isLoading) {
         return <div className='h-screen flex items-center justify-center text-gray-500'>Loading order</div>

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchedCustomerOrders, fetchedRestaurantOrders, fetchedSingleCustomerOrders } from "../apis/OrderApi";
+import { fetchedCustomerOrders, fetchedRestaurantOrders, fetchedRiderOrders, fetchedSingleCustomerOrders } from "../apis/OrderApi";
 
 export const useOrderApi = (restaurantId: string) => {
     return useQuery({
@@ -14,7 +14,7 @@ export const useCustomerOrderApi = () => {
         queryKey: ["order"],
         queryFn: fetchedCustomerOrders
     })
-}
+};
 
 export const useCustomerSingleOrderApi = (orderId?: string) => {
     return useQuery({
@@ -22,4 +22,11 @@ export const useCustomerSingleOrderApi = (orderId?: string) => {
         queryFn: () => fetchedSingleCustomerOrders(orderId as string),
         enabled: !!orderId
     })
-}
+};
+
+export const useRiderOrderApi = () => {
+    return useQuery({
+        queryKey: ["riderorder"],
+        queryFn: fetchedRiderOrders,
+    })
+};

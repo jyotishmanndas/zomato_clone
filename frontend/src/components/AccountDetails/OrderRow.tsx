@@ -1,4 +1,3 @@
-import React from 'react'
 import type { IOrder } from '../../types'
 import { Package } from 'lucide-react'
 import { useNavigate } from 'react-router'

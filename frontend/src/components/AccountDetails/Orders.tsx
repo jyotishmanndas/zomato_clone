@@ -1,4 +1,4 @@
-import { Clock, ExternalLink, Package } from 'lucide-react'
+import { Clock } from 'lucide-react'
 import { useCustomerOrderApi } from '../../hooks/useOrderApi';
 import { useSocket } from '../../hooks/useSocket';
 import { useEffect } from 'react';
@@ -21,11 +21,13 @@ const Orders = () => {
             });
         };
         socket.on("order:update", onOrderUpdate);
+        socket.on("order:rider_assigned", onOrderUpdate);
 
         return () => {
-            socket.off("order:update", onOrderUpdate)
+            socket.off("order:update", onOrderUpdate);
+            socket.off("order:rider_assigned", onOrderUpdate)
         };
-        
+
     }, [socketRef])
 
     if (isLoading) {

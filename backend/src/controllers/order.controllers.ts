@@ -165,7 +165,6 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
         };
 
         const { orderId } = req.params;
-
         if (!mongoose.Types.ObjectId.isValid(orderId as string)) {
             return res.status(400).json({ msg: "Invalid order Id format" })
         };
@@ -275,11 +274,6 @@ export const getCurrentOrdersForRiders = async (req: Request, res: Response) => 
             return res.status(403).json({ msg: "Forbidden: rider role required" })
         };
 
-        // const { riderId } = req.params;
-        // if (!mongoose.Types.ObjectId.isValid(riderId as string)) {
-        //     return res.status(400).json({ msg: "Invalid rider Od format" })
-        // };
-
         const rider = await Rider.findOne({
             userId: req.user?._id,
             isVerified: true,
@@ -297,7 +291,7 @@ export const getCurrentOrdersForRiders = async (req: Request, res: Response) => 
         })
             .populate("restaurantId");
 
-        if (!order) {
+        if (order.length === 0) {
             return res.status(404).json({ msg: "order not found" })
         };
 
