@@ -16,48 +16,49 @@ const Account = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#FDFDFD] p-4 md:pt-20">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex flex-col lg:flex-row gap-8">
-                    <aside className="lg:w-80 flex flex-col gap-2">
-                        <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm mb-4">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-14 h-14 bg-[#E23744] rounded-2xl flex items-center justify-center text-white font-bold text-xl">
+        <div className="min-h-screen bg-[color:var(--color-bg-blush)] px-4 pb-20 pt-24">
+            <div className="mx-auto max-w-6xl">
+                <div className="flex flex-col gap-6 lg:flex-row">
+                    <aside className="flex flex-col gap-2 lg:w-72">
+                        <div className="mb-3 rounded-[2rem] border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] p-5 shadow-sm">
+                            <div className="mb-5 flex items-center gap-4">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:var(--color-brand-red)] text-base font-bold text-white">
                                     {user?.name.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
-                                    <h2 className="font-bold text-slate-900">{user?.name}</h2>
+                                    <h2 className="text-sm font-semibold text-[color:var(--color-charcoal)]">{user?.name}</h2>
+                                    <p className="text-[11px] text-[color:var(--color-text-secondary)]">View and manage your account</p>
                                 </div>
                             </div>
 
-                            <nav className="space-y-2">
+                            <nav className="space-y-1.5">
                                 {menuItems.map((item) => (
                                     <button
                                         key={item.id}
                                         onClick={() => setActiveTab(item.id)}
-                                        className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl font-bold transition-all ${activeTab === item.id
-                                            ? "bg-slate-900 text-white"
-                                            : "text-slate-500 hover:bg-slate-50 hover:border border-slate-200"
+                                        className={`flex w-full items-center gap-3 rounded-2xl px-4 py-2.5 text-xs font-semibold transition-all ${activeTab === item.id
+                                            ? "bg-[color:var(--color-brand-red)] text-white"
+                                            : "text-[color:var(--color-text-secondary)] hover:bg-[color:var(--color-bg-blush)]"
                                             }`}
                                     >
-                                        <item.icon size={18} />
-                                        <span className="text-sm">{item.label}</span>
-                                        <ChevronRight size={14} className={`ml-auto ${activeTab === item.id ? "opacity-100" : "opacity-0"}`} />
+                                        <item.icon size={16} />
+                                        <span>{item.label}</span>
+                                        <ChevronRight size={12} className={`ml-auto ${activeTab === item.id ? "opacity-100" : "opacity-0"}`} />
                                     </button>
                                 ))}
                             </nav>
 
-                            <div className="mt-8 pt-6 border-t border-slate-50">
-                                <button className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl font-bold text-red-500 hover:bg-red-50 transition-all">
-                                    <LogOut size={18} />
-                                    <span className="text-sm">Logout</span>
+                            <div className="mt-6 border-t border-[color:var(--color-divider)] pt-4">
+                                <button className="flex w-full items-center gap-3 rounded-2xl px-4 py-2.5 text-xs font-semibold text-red-500 transition hover:bg-red-50">
+                                    <LogOut size={16} />
+                                    <span>Logout</span>
                                 </button>
                             </div>
                         </div>
                     </aside>
 
                     <main className="flex-1">
-                        <div className="bg-white min-h-[600px] rounded-[2.5rem] border border-slate-100 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] p-6 md:p-10">
+                        <div className="min-h-[520px] rounded-[2.5rem] border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] p-5 shadow-sm md:p-8">
 
                             {activeTab === 'profile' && (
                                 <Profile />

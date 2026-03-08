@@ -1,1 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-display: "Nunito", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  --color-brand-red: #e23744;
+  --color-brand-red-hover: #cb2030;
+  --color-bg-blush: #fff5f5;
+  --color-surface: #ffffff;
+  --color-charcoal: #1c1c1c;
+  --color-text-secondary: #696969;
+  --color-divider: #f0f0f5;
+  --color-success: #26a541;
+  --color-warning: #f8a400;
+  --color-nonveg: #963415;
+
+  --radius-card-lg: 16px;
+  --radius-card-md: 12px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+@layer base {
+  :root {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-blush);
+    color: var(--color-charcoal);
+  }
+
+  .dark {
+    --color-bg-blush: #111111;
+    --color-surface: #181818;
+    --color-charcoal: #f7f7f7;
+    --color-text-secondary: #b3b3b3;
+    --color-divider: #262626;
+  }
+
+  body {
+    @apply m-0 antialiased;
+    background-color: var(--color-bg-blush);
+    color: var(--color-charcoal);
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-sans);
+  }
+
+  .font-price {
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .app-shell {
+    @apply min-h-screen bg-[color:var(--color-bg-blush)] text-[color:var(--color-charcoal)];
+  }
+
+  .card-surface {
+    @apply rounded-2xl bg-[color:var(--color-surface)] shadow-sm;
+  }
+
+  .chip-pill {
+    @apply inline-flex items-center rounded-full border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] px-3 py-1 text-xs font-medium text-[color:var(--color-text-secondary)];
+  }
+
+  .badge-veg {
+    @apply inline-flex h-3 w-3 items-center justify-center rounded-[4px] border border-[color:var(--color-success)];
+  }
+
+  .badge-veg-dot {
+    @apply h-1.5 w-1.5 rounded-full bg-[color:var(--color-success)];
+  }
+
+  .badge-nonveg {
+    @apply inline-flex h-3 w-3 items-center justify-center rounded-[4px] border border-[color:var(--color-nonveg)];
+  }
+
+  .badge-nonveg-dot {
+    @apply h-1.5 w-1.5 rounded-full bg-[color:var(--color-nonveg)];
+  }
+
+  .btn-primary {
+    @apply inline-flex h-[52px] w-full items-center justify-center rounded-full bg-[color:var(--color-brand-red)] px-6 text-sm font-bold text-white transition-colors hover:bg-[color:var(--color-brand-red-hover)] disabled:cursor-not-allowed disabled:bg-slate-300;
+  }
+
+  .btn-outline {
+    @apply inline-flex h-[48px] items-center justify-center rounded-full border border-[color:var(--color-divider)] bg-transparent px-5 text-sm font-semibold text-[color:var(--color-charcoal)] hover:bg-[color:var(--color-divider)];
+  }
+
+  .input-shell {
+    @apply flex h-12 items-center gap-2 rounded-2xl bg-[color:var(--color-divider)] px-3 text-sm text-[color:var(--color-charcoal)];
+  }
+
+  .section-heading {
+    @apply mb-3 text-[20px] font-bold text-[color:var(--color-charcoal)];
+  }
+
+  .meta-text {
+    @apply text-xs font-medium text-[color:var(--color-text-secondary)];
+  }
+}

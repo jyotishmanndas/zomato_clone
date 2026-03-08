@@ -1,19 +1,27 @@
 const Profile = () => {
     return (
-        <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-            <h3 className="text-2xl font-black text-slate-900 mb-6">Profile Settings</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-[color:var(--color-charcoal)]">Profile settings</h3>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
-                    <input type="text" defaultValue="John Doe" className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#E23744] focus:bg-white outline-none transition-all" />
+                    <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">Full name</label>
+                    <input
+                        type="text"
+                        defaultValue="John Doe"
+                        className="w-full rounded-2xl border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] px-4 py-3 text-sm outline-none focus:border-[color:var(--color-brand-red)]"
+                    />
                 </div>
                 <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email</label>
-                    <input type="email" defaultValue="john@example.com" className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-[#E23744] focus:bg-white outline-none transition-all" />
+                    <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">Email</label>
+                    <input
+                        type="email"
+                        defaultValue="john@example.com"
+                        className="w-full rounded-2xl border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] px-4 py-3 text-sm outline-none focus:border-[color:var(--color-brand-red)]"
+                    />
                 </div>
             </div>
-            <button className="mt-8 px-10 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-lg shadow-slate-200">
-                Update Profile
+            <button className="btn-primary w-max px-10">
+                Update profile
             </button>
         </div>
     )

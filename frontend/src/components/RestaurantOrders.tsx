@@ -83,35 +83,34 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
 
 
     if (isLoading) {
-        return <div className='h-screen flex items-center justify-center text-gray-500'>Loading order</div>
+        return <div className='flex h-screen items-center justify-center text-[color:var(--color-text-secondary)]'>Loading orders...</div>
     };
 
     const activeOrder = data.orders.filter((o: any) => ACTIVE_STATUSES.includes(o.status));
     const completeOrder = data.orders.filter((o: any) => !ACTIVE_STATUSES.includes(o.status));
 
     return (
-        <div className='space-y-6'>
+        <div className='space-y-5'>
             {!audioUnlocked && (
-                <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between'>
+                <div className='flex items-center justify-between gap-3 rounded-3xl bg-blue-50 p-4 text-xs text-blue-900 ring-1 ring-blue-100'>
                     <div className='flex items-center gap-3'>
                         <span className='text-2xl'>🔔</span>
                         <div>
-                            <p className='font-medium text-blue-900'>Enable sound notification</p>
-                            <p className='text-sm text-blue-700'>Get notified when new orders arrive</p>
+                            <p className='text-sm font-semibold'>Enable sound notifications</p>
+                            <p className='text-[11px]'>Get a chime whenever a new order is placed or updated.</p>
                         </div>
                     </div>
-                    <button onClick={unlockAudio} className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition'>Enable sound</button>
+                    <button onClick={unlockAudio} className='rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700'>Enable sound</button>
                 </div>
             )}
 
-
-            <div className='space-y-3'>
-                <h3 className='text-lg font-semibold'>Active Orders</h3>
+            <div className='space-y-3 rounded-3xl bg-[color:var(--color-surface)] p-4 shadow-sm ring-1 ring-[color:var(--color-divider)]'>
+                <h3 className='text-sm font-semibold text-[color:var(--color-charcoal)]'>Active orders</h3>
 
                 {activeOrder.length === 0 ? (
-                    <p className='flex items-center justify-center text-sm text-gray-500'>No Active orders</p>
+                    <p className='flex items-center justify-center text-xs text-[color:var(--color-text-secondary)]'>No active orders</p>
                 ) : (
-                    <div className='grid grid-cols-2 gap-4'>
+                    <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
                         {activeOrder.map((order: any) => (
                             <OrderCard key={order._id} order={order} />
                         ))}
@@ -119,13 +118,13 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
                 )}
             </div>
 
-            <div className='space-y-3'>
-                <h3 className='text-lg font-semibold'>Completed Orders</h3>
+            <div className='space-y-3 rounded-3xl bg-[color:var(--color-surface)] p-4 shadow-sm ring-1 ring-[color:var(--color-divider)]'>
+                <h3 className='text-sm font-semibold text-[color:var(--color-charcoal)]'>Completed orders</h3>
 
                 {completeOrder.length === 0 ? (
-                    <p className='flex items-center justify-center text-sm text-gray-500'>No Completed orders</p>
+                    <p className='flex items-center justify-center text-xs text-[color:var(--color-text-secondary)]'>No completed orders</p>
                 ) : (
-                    <div className='grid grid-cols-2 gap-4'>
+                    <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
                         {completeOrder.map((order: any) => (
                             <OrderCard key={order._id} order={order} />
                         ))}

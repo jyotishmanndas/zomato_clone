@@ -31,12 +31,12 @@ const Orders = () => {
     }, [socketRef])
 
     if (isLoading) {
-        return <div className='flex items-center justify-center'>Loading orders...</div>
+        return <div className='flex items-center justify-center text-[color:var(--color-text-secondary)]'>Loading orders...</div>
     };
 
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
         return (
-            <div className='flex items-center justify-center'>
+            <div className='flex items-center justify-center text-[color:var(--color-text-secondary)]'>
                 No orders yet
             </div>
         )
@@ -46,17 +46,17 @@ const Orders = () => {
     const completeOrder = data.filter((o: IOrder) => !ACTIVE_STATUSES.includes(o.status));
 
     return (
-        <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-            <div className="flex items-center justify-between mb-8">
-                <h3 className="text-2xl font-black text-slate-900">My Orders</h3>
-                <Clock size={20} className="text-slate-300" />
+        <div className="space-y-6">
+            <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-[color:var(--color-charcoal)]">My orders</h3>
+                <Clock size={18} className="text-[color:var(--color-text-secondary)]" />
             </div>
 
             <div className="space-y-4">
-                <h2 className='text-lg font-semibold'>Active Orders</h2>
+                <h2 className='text-sm font-semibold text-[color:var(--color-charcoal)]'>Active orders</h2>
 
                 {activeOrder.length === 0 ? (
-                    <p>No active orders</p>
+                    <p className='text-xs text-[color:var(--color-text-secondary)]'>No active orders</p>
                 ) : (
                     activeOrder.map((order: IOrder) => (
                         <OrderRow key={order._id} order={order} />
@@ -65,10 +65,10 @@ const Orders = () => {
             </div>
 
             <div className="space-y-4">
-                <h2 className='text-lg font-semibold'>Completed Orders</h2>
+                <h2 className='text-sm font-semibold text-[color:var(--color-charcoal)]'>Completed orders</h2>
 
-                {activeOrder.length === 0 ? (
-                    <p>No completed orders</p>
+                {completeOrder.length === 0 ? (
+                    <p className='text-xs text-[color:var(--color-text-secondary)]'>No completed orders</p>
                 ) : (
                     completeOrder.map((order: IOrder) => (
                         <OrderRow key={order._id} order={order} />

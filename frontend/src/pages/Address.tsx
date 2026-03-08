@@ -174,10 +174,9 @@ const Address = () => {
     };
     return (
         <div className="mx-auto max-w-4xl px-4 py-6 space-y-6">
-            <h1 className="text-2xl font-bold">Select Delivery Address</h1>
+            <h1 className="font-display text-[22px] font-extrabold text-[color:var(--color-charcoal)]">Select delivery address</h1>
             {/* 🗺 Map */}
-            <div className="relative h-100 w-full overflow-hidden rounded-lg
-    border">
+            <div className="relative h-80 w-full overflow-hidden rounded-3xl border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] shadow-sm">
                 <MapContainer
                     center={[latitude || 28.6139, longitude || 77.209]}
                     zoom={13}
@@ -199,7 +198,7 @@ const Address = () => {
             </div>
             {/* 📍 Selected address */}
             {formattedAddress && (
-                <div className="rounded-lg border bg-green-50 p-3 text-sm">
+                <div className="rounded-2xl border border-green-100 bg-green-50 p-3 text-xs">
                     📍 {formattedAddress}
                 </div>
             )}
@@ -209,16 +208,13 @@ const Address = () => {
                 placeholder="Mobile number"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
-                className="w-full rounded-lg border px-4 py-2"
+                className="w-full rounded-2xl border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] px-4 py-3 text-sm outline-none focus:border-[color:var(--color-brand-red)]"
             />
             {/* ➕ Save */}
             <button
                 disabled={adding}
                 onClick={addAddress}
-                className="flex items-center justify-center gap-2 rounded-lg
-    
-    bg-[#E23744] px-4 py-3 text-white hover:bg-[#d32f3a] disabled:opacity-
-    50"
+                className="btn-primary flex w-full items-center justify-center gap-2 disabled:opacity-50"
 
             >
                 {adding ? <BiLoader className="animate-spin" /> : <BiPlus />}
@@ -227,31 +223,31 @@ const Address = () => {
 
             {/* 📋 Saved Addresses */}
             <div className="space-y-3">
-                <h2 className="text-lg font-semibold">Saved Addresses</h2>
+                <h2 className="text-sm font-semibold text-[color:var(--color-charcoal)]">Saved addresses</h2>
                 {loading ? (
-                    <p className="text-sm text-gray-500">Loading...</p>
+                    <p className="text-xs text-[color:var(--color-text-secondary)]">Loading...</p>
                 ) : addresses.length === 0 ? (
-                    <p className="text-sm text-gray-500">No addresses saved</p>
+                    <p className="text-xs text-[color:var(--color-text-secondary)]">No addresses saved</p>
                 ) : (
                     addresses.map((addr) => (
                         <div
                             key={addr._id}
-                            className="flex items-center justify-between rounded-lg
-    border bg-white p-3"
+                            className="flex items-center justify-between rounded-2xl border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] p-3 text-xs shadow-sm"
                         >
                             <div>
 
-                                <p className="text-sm font-
-    medium">{addr.formattedAddress}</p>
+                                <p className="text-[13px] font-medium text-[color:var(--color-charcoal)]">
+                                    {addr.formattedAddress}
+                                </p>
 
-                                <p className="text-xs text-gray-500">📞
-                                    {addr.mobile}</p>
+                                <p className="mt-1 text-[11px] text-[color:var(--color-text-secondary)]">
+                                    📞 {addr.mobile}
+                                </p>
                             </div>
                             <button
                                 onClick={() => deleteAddress(addr._id)}
                                 disabled={deletingId === addr._id}
-                                className="rounded-lg p-2 text-red-500 hover:bg-red-50
-    disabled:opacity-50"
+                                className="rounded-full p-2 text-red-500 hover:bg-red-50 disabled:opacity-50"
                             >
                                 {deletingId === addr._id ? (
                                     <BiLoader size={16} className="animate-spin" />

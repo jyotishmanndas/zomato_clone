@@ -1,14 +1,13 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import { Outlet } from 'react-router'
+import Navbar from "../components/Navbar";
+import { Outlet } from "react-router";
 
 const AuthLayout = () => {
-    return (
-        <div>
-            <Navbar />
-            <Outlet />
-        </div>
-    )
-}
+  return (
+    <div className="app-shell pb-16">
+      <Navbar />
+      <Outlet />
+    </div>
+  );
+};
 
-export default AuthLayout
+export default AuthLayout;

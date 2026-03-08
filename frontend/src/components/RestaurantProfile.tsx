@@ -1,72 +1,103 @@
-import React from 'react'
-import type { Restaurant } from '../types'
-import { Clock, Globe, MapPin, Phone, Store } from 'lucide-react'
-
+import type { Restaurant } from "../types";
+import { Clock, Globe, MapPin, Phone, Store } from "lucide-react";
 
 const RestaurantProfile = ({ restaurant }: { restaurant: Restaurant }) => {
   return (
-    <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/40">
-        <div className="h-48 bg-slate-900 relative">
-          <img src={restaurant.image || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"} className="w-full h-full object-cover opacity-60" alt="banner" />
-          <div className="absolute -bottom-10 left-10 w-24 h-24 bg-white rounded-3xl p-1 shadow-lg border border-slate-100">
-            <div className="w-full h-full bg-red-50 rounded-[1.4rem] flex items-center justify-center text-red-500">
-              <Store size={40} />
+    <div className="mx-auto max-w-3xl">
+      <div className="overflow-hidden rounded-[2.5rem] border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] shadow-sm">
+        <div className="relative h-44 bg-[color:var(--color-charcoal)]">
+          <img
+            src={
+              restaurant.image ||
+              "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"
+            }
+            className="h-full w-full object-cover opacity-70"
+            alt="banner"
+          />
+          <div className="absolute -bottom-10 left-8 h-20 w-20 rounded-3xl border border-[color:var(--color-surface)] bg-[color:var(--color-surface)] p-1 shadow-sm">
+            <div className="flex h-full w-full items-center justify-center rounded-[1.4rem] bg-[color:var(--color-bg-blush)] text-[color:var(--color-brand-red)]">
+              <Store size={36} />
             </div>
           </div>
         </div>
 
-        <div className="pt-16 px-10 pb-10">
-          <div className="flex justify-between items-start mb-8">
+        <div className="px-8 pb-8 pt-14">
+          <div className="mb-6 flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-black text-slate-900">{restaurant.name}</h2>
-              <p className="text-slate-500 mt-1 flex items-center gap-2">
-                <Globe size={14} /> Official Merchant Partner
+              <h2 className="font-display text-[22px] font-extrabold text-[color:var(--color-charcoal)]">
+                {restaurant.name}
+              </h2>
+              <p className="mt-1 flex items-center gap-2 text-xs text-[color:var(--color-text-secondary)]">
+                <Globe size={14} /> Official merchant partner
               </p>
             </div>
-            <button className="px-6 py-2 border-2 border-slate-100 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">Edit Details</button>
+            <button className="btn-outline h-9 px-4 text-xs font-semibold">
+              Edit details
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8 border-y border-slate-50">
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400"><Phone size={18} /></div>
+          <div className="grid gap-6 border-y border-[color:var(--color-divider)] py-6 text-xs">
+            <div className="space-y-4">
+              <div className="flex gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]">
+                  <Phone size={16} />
+                </div>
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Phone Support</p>
-                  <p className="font-bold">{restaurant.phone}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
+                    Phone support
+                  </p>
+                  <p className="mt-1 text-[13px] font-semibold text-[color:var(--color-charcoal)]">
+                    {restaurant.phone}
+                  </p>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400"><MapPin size={18} /></div>
+
+              <div className="flex gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]">
+                  <MapPin size={16} />
+                </div>
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Address</p>
-                  <p className="font-bold text-sm text-slate-700 leading-tight">
-                    {restaurant.autoLocation.formattedAddress || "Set your location"}
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
+                    Address
+                  </p>
+                  <p className="mt-1 text-[13px] font-semibold leading-snug text-[color:var(--color-charcoal)]">
+                    {restaurant.autoLocation.formattedAddress ||
+                      "Set your location"}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400"><Clock size={18} /></div>
+
+            <div className="space-y-4">
+              <div className="flex gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]">
+                  <Clock size={16} />
+                </div>
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Operating Hours</p>
-                  <p className="font-bold">09:00 AM - 10:00 PM</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
+                    Operating hours
+                  </p>
+                  <p className="mt-1 text-[13px] font-semibold text-[color:var(--color-charcoal)]">
+                    09:00 AM – 10:00 PM
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-8 p-6 bg-slate-50 rounded-3xl">
-            <p className="text-xs font-black text-slate-400 uppercase mb-2 tracking-widest">Restaurant Bio</p>
-            <p className="text-slate-600 italic leading-relaxed">
-              "{restaurant.description || "You haven't added a description yet. Tell your customers what makes your kitchen special."}"
+          <div className="mt-6 rounded-3xl bg-[color:var(--color-bg-blush)] p-5">
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
+              Restaurant bio
+            </p>
+            <p className="text-[13px] leading-relaxed text-[color:var(--color-charcoal)]">
+              {restaurant.description ||
+                "You haven't added a description yet. Tell your customers what makes your kitchen special."}
             </p>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RestaurantProfile
+export default RestaurantProfile;

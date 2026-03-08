@@ -1,160 +1,215 @@
-import React, { useEffect, useState } from 'react';
-import { useRestaurantApi } from '../hooks/useRestaurantApi';
-import { Plus, Store, Utensils, User, Package, X, PackageOpen, Package2 } from 'lucide-react';
-import { axiosInstance } from '../config/axiosInstance';
-import toast from 'react-hot-toast';
-import MenuForm from '../components/forms/MenuForm';
-import { useNavigate } from 'react-router';
-import RestaurantProfile from '../components/RestaurantProfile';
-import { useMenuApi } from '../hooks/useMenuApi';
-import Menu from '../components/Menu/Menu';
-import RestaurantOrders from '../components/RestaurantOrders';
+import { useEffect, useState } from "react";
+import { useRestaurantApi } from "../hooks/useRestaurantApi";
+import {
+  Plus,
+  Store,
+  Utensils,
+  User,
+  Package,
+  X,
+  Package2,
+} from "lucide-react";
+import { axiosInstance } from "../config/axiosInstance";
+import toast from "react-hot-toast";
+import MenuForm from "../components/forms/MenuForm";
+import { useNavigate } from "react-router";
+import RestaurantProfile from "../components/RestaurantProfile";
+import { useMenuApi } from "../hooks/useMenuApi";
+import Menu from "../components/Menu/Menu";
+import RestaurantOrders from "../components/RestaurantOrders";
 
 const Restaurant = () => {
-    const { data, isLoading } = useRestaurantApi();
-    const { data: menus } = useMenuApi();
-    const navigate = useNavigate();
+  const { data, isLoading } = useRestaurantApi();
+  const { data: menus } = useMenuApi();
+  const navigate = useNavigate();
 
-    const [activeTab, setActiveTab] = useState('profile');
-    const [isStoreOpen, setIsStoreOpen] = useState(false);
-    const [showAddForm, setShowAddForm] = useState(false);
+  const [activeTab, setActiveTab] = useState("profile");
+  const [isStoreOpen, setIsStoreOpen] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
 
-    const restaurant = data || {};
+  const restaurant = data || {};
 
-    useEffect(() => {
-        if (restaurant?.isOpen !== undefined) {
-            setIsStoreOpen(restaurant.isOpen);
-        }
-    }, [restaurant])
-
-    if (isLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
-                <div className="relative flex items-center justify-center">
-                    <div className="w-16 h-16 border-4 border-indigo-100 border-t-[#E23744] rounded-full animate-spin" />
-                    <Store className="absolute text-[#E23744]" size={24} />
-                </div>
-                <p className="mt-4 text-slate-600 font-medium tracking-wide">Loading your storefront...</p>
-            </div>
-        );
-    };
-
-    if (!data || Object.keys(data).length === 0) {
-        return (
-            <div className="h-screen bg-slate-50 flex flex-col">
-                <div className="flex-1 flex items-center justify-center px-6">
-                    <div className="max-w-md w-full bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 text-center">
-                        <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-red-50 text-[#E23744] mb-8 transform rotate-3">
-                            <Store size={48} strokeWidth={1.5} />
-                        </div>
-                        <h2 className="text-3xl font-bold text-slate-900 mb-4">Ready to sell?</h2>
-                        <p className="text-slate-500 mb-10 text-lg leading-relaxed">
-                            You haven't registered a restaurant yet. Start your journey and reach thousands of customers today.
-                        </p>
-                        <button
-                            onClick={() => navigate("/create-restaurant")}
-                            className="w-full bg-[#E23744] hover:bg-black text-white flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-lg shadow-lg transition-all active:scale-95"
-                        >
-                            <Plus size={24} />
-                            Create Restaurant
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
+  useEffect(() => {
+    if (restaurant?.isOpen !== undefined) {
+      setIsStoreOpen(restaurant.isOpen);
     }
+  }, [restaurant]);
 
-    const toogleStatus = async () => {
-        const res = await axiosInstance.patch(`/api/v1/restaurant/status/${restaurant._id}`);
-        if (res.status === 200) {
-            toast.success(res.data.msg);
-            setIsStoreOpen(res.data.restaurant.isOpen)
-        }
-    };
-
+  if (isLoading) {
     return (
-        <div className="min-h-screen bg-[#F9FAFB] pb-20">
-            <div className="bg-white border-b border-slate-200 sticky top-0 z-40">
-                <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="bg-red-50 p-2 rounded-xl">
-                            <Utensils className="text-red-500" size={24} />
-                        </div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-900">{restaurant.name}</h1>
-                    </div>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[color:var(--color-bg-blush)]">
+        <div className="relative flex items-center justify-center">
+          <div className="h-16 w-16 animate-spin rounded-full border-4 border-[color:var(--color-divider)] border-t-[color:var(--color-brand-red)]" />
+          <Store
+            className="absolute text-[color:var(--color-brand-red)]"
+            size={24}
+          />
+        </div>
+        <p className="mt-4 text-sm font-medium text-[color:var(--color-text-secondary)]">
+          Loading your storefront...
+        </p>
+      </div>
+    );
+  }
 
-                    <div className={`flex items-center gap-3 px-4 py-2 rounded-2xl border transition-all ${isStoreOpen ? 'bg-green-50 border-green-100' : 'bg-slate-50 border-slate-200'}`}>
-                        <span className={`text-[10px] font-black uppercase tracking-tighter ${isStoreOpen ? 'text-green-600' : 'text-slate-400'}`}>
-                            {isStoreOpen ? 'Accepting Orders' : 'Store Closed'}
-                        </span>
-                        <button
-                            onClick={toogleStatus}
-                            className={`relative w-10 h-5 flex items-center rounded-full transition-colors ${isStoreOpen ? 'bg-green-500' : 'bg-slate-300'}`}
-                        >
-                            <span className={`absolute bg-white w-3.5 h-3.5 rounded-full shadow-sm transition-transform ${isStoreOpen ? 'translate-x-5.5' : 'translate-x-1'}`} />
-                        </button>
-                    </div>
-                </div>
+  if (!data || Object.keys(data).length === 0) {
+    return (
+      <div className="flex h-screen flex-col bg-[color:var(--color-bg-blush)]">
+        <div className="flex flex-1 items-center justify-center px-6">
+          <div className="w-full max-w-md rounded-[2.5rem] border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] p-8 text-center shadow-sm">
+            <div className="mb-8 inline-flex h-24 w-24 rotate-3 items-center justify-center rounded-3xl bg-[color:var(--color-bg-blush)] text-[color:var(--color-brand-red)]">
+              <Store size={48} strokeWidth={1.5} />
+            </div>
+            <h2 className="mb-3 font-display text-3xl font-extrabold text-[color:var(--color-charcoal)]">
+              Ready to sell?
+            </h2>
+            <p className="mb-8 text-sm leading-relaxed text-[color:var(--color-text-secondary)]">
+              You haven't registered a restaurant yet. Create one and start
+              reaching thousands of hungry customers today.
+            </p>
+            <button
+              onClick={() => navigate("/create-restaurant")}
+              className="btn-primary flex items-center justify-center gap-2"
+            >
+              <Plus size={20} />
+              Create restaurant
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-                <div className="max-w-5xl mx-auto px-6 flex gap-8">
-                    <button
-                        onClick={() => setActiveTab('profile')}
-                        className={`py-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 ${activeTab === 'profile' ? 'border-red-500 text-red-500' : 'border-transparent text-slate-400'}`}
-                    >
-                        <User size={18} /> Restaurant Profile
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('menu')}
-                        className={`py-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 ${activeTab === 'menu' ? 'border-red-500 text-red-500' : 'border-transparent text-slate-400'}`}
-                    >
-                        <Package size={18} /> Menu Items
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('orders')}
-                        className={`py-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 ${activeTab === 'orders' ? 'border-red-500 text-red-500' : 'border-transparent text-slate-400'}`}
-                    >
-                        <Package2 size={18} /> Orders
-                    </button>
-                </div>
+  const toogleStatus = async () => {
+    const res = await axiosInstance.patch(
+      `/api/v1/restaurant/status/${restaurant._id}`
+    );
+    if (res.status === 200) {
+      toast.success(res.data.msg);
+      setIsStoreOpen(res.data.restaurant.isOpen);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[color:var(--color-bg-blush)] pb-24">
+      <div className="sticky top-0 z-40 border-b border-[color:var(--color-divider)] bg-[color:var(--color-surface)]/95 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-[color:var(--color-bg-blush)] p-2 text-[color:var(--color-brand-red)]">
+              <Utensils size={22} />
+            </div>
+            <div>
+              <h1 className="font-display text-[18px] font-extrabold text-[color:var(--color-charcoal)]">
+                {restaurant.name}
+              </h1>
+              <p className="text-[11px] text-[color:var(--color-text-secondary)]">
+                Manage your restaurant profile, menu and incoming orders.
+              </p>
+            </div>
+          </div>
+
+          <div
+            className={`flex items-center gap-3 rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${
+              isStoreOpen
+                ? "border-green-100 bg-green-50 text-green-700"
+                : "border-[color:var(--color-divider)] bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]"
+            }`}
+          >
+            <span>{isStoreOpen ? "Accepting orders" : "Store closed"}</span>
+            <button
+              onClick={toogleStatus}
+              className={`relative flex h-5 w-9 items-center rounded-full transition-colors ${
+                isStoreOpen ? "bg-green-500" : "bg-slate-300"
+              }`}
+            >
+              <span
+                className={`absolute h-3.5 w-3.5 rounded-full bg-[color:var(--color-surface)] shadow-sm transition-transform ${
+                  isStoreOpen ? "translate-x-4" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+
+        <div className="mx-auto flex max-w-5xl gap-6 px-6">
+          <button
+            onClick={() => setActiveTab("profile")}
+            className={`border-b-2 pb-2 pt-1 text-xs font-semibold flex items-center gap-2 transition-all ${
+              activeTab === "profile"
+                ? "border-[color:var(--color-brand-red)] text-[color:var(--color-brand-red)]"
+                : "border-transparent text-[color:var(--color-text-secondary)]"
+            }`}
+          >
+            <User size={16} /> Profile
+          </button>
+          <button
+            onClick={() => setActiveTab("menu")}
+            className={`border-b-2 pb-2 pt-1 text-xs font-semibold flex items-center gap-2 transition-all ${
+              activeTab === "menu"
+                ? "border-[color:var(--color-brand-red)] text-[color:var(--color-brand-red)]"
+                : "border-transparent text-[color:var(--color-text-secondary)]"
+            }`}
+          >
+            <Package size={16} /> Menu
+          </button>
+          <button
+            onClick={() => setActiveTab("orders")}
+            className={`border-b-2 pb-2 pt-1 text-xs font-semibold flex items-center gap-2 transition-all ${
+              activeTab === "orders"
+                ? "border-[color:var(--color-brand-red)] text-[color:var(--color-brand-red)]"
+                : "border-transparent text-[color:var(--color-text-secondary)]"
+            }`}
+          >
+            <Package2 size={16} /> Orders
+          </button>
+        </div>
+      </div>
+
+      <main className="mx-auto max-w-5xl px-6 pt-6">
+        {activeTab === "menu" && (
+          <div className="space-y-5">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-[20px] font-extrabold text-[color:var(--color-charcoal)]">
+                Your menu
+              </h2>
+              <button
+                onClick={() => setShowAddForm(!showAddForm)}
+                className="btn-outline flex items-center gap-2 px-4 text-xs"
+                style={{ height: 40 }}
+              >
+                {showAddForm ? <X size={16} /> : <Plus size={16} />}
+                {showAddForm ? "Cancel" : "Create item"}
+              </button>
             </div>
 
-            <main className="max-w-5xl mx-auto p-6">
+            {showAddForm && (
+              <div className="rounded-3xl bg-[color:var(--color-surface)] p-4 shadow-sm ring-1 ring-[color:var(--color-divider)]">
+                <MenuForm restaurantId={restaurant._id} />
+              </div>
+            )}
 
-                {activeTab === 'menu' && (
-                    <div className="space-y-6 animate-in fade-in duration-300">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-2xl font-black text-slate-900">Your Menu</h2>
-                            <button
-                                onClick={() => setShowAddForm(!showAddForm)}
-                                className="bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-slate-800 transition-all"
-                            >
-                                {showAddForm ? <X size={18} /> : <Plus size={18} />}
-                                {showAddForm ? 'Cancel' : 'Create Item'}
-                            </button>
-                        </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {menus.map((m: any) => (
+                <Menu key={m.id} menu={m} isSeller={true} />
+              ))}
+            </div>
+          </div>
+        )}
 
-                        {showAddForm && (
-                            <MenuForm restaurantId={restaurant._id} />
-                        )}
+        {activeTab === "profile" && (
+          <div className="pt-2">
+            <RestaurantProfile restaurant={restaurant} />
+          </div>
+        )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {menus.map((m: any) => (
-                                <Menu key={m.id} menu={m} isSeller={true} />
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'profile' && (
-                    <RestaurantProfile restaurant={restaurant} />
-                )}
-
-                {activeTab === 'orders' && (
-                    <RestaurantOrders restaurantId={restaurant._id} />
-                )}
-            </main>
-        </div>
-    );
+        {activeTab === "orders" && (
+          <div className="pt-2">
+            <RestaurantOrders restaurantId={restaurant._id} />
+          </div>
+        )}
+      </main>
+    </div>
+  );
 };
 
 export default Restaurant;

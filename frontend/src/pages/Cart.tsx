@@ -1,5 +1,5 @@
 import React from "react";
-import { Minus, Plus, Trash2, MapPin } from "lucide-react";
+import { Minus, Plus, Trash2, MapPin, Scissors } from "lucide-react";
 import { useFetchedCart } from "../hooks/useCartApi";
 import { axiosInstance } from "../config/axiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ const Cart = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-slate-500">
+      <div className="flex min-h-screen items-center justify-center text-[color:var(--color-text-secondary)]">
         Loading cart...
       </div>
     );
@@ -23,11 +23,11 @@ const Cart = () => {
 
   if (!data?.cart || data.cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-24 flex flex-col items-center justify-center text-center px-4">
-        <h2 className="text-2xl font-bold text-slate-900">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[color:var(--color-bg-blush)] px-4 pt-24 text-center">
+        <h2 className="font-display text-2xl font-extrabold text-[color:var(--color-charcoal)]">
           Your cart is empty
         </h2>
-        <p className="text-slate-500 mt-2">
+        <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
           Add some delicious items to get started 🍽
         </p>
       </div>
@@ -69,11 +69,11 @@ const Cart = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-20">
-      <div className="max-w-6xl mx-auto px-4 space-y-8">
+    <div className="min-h-screen bg-[color:var(--color-bg-blush)] pt-24 pb-24">
+      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4">
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex items-center gap-6">
-          <div className="w-24 h-24 rounded-2xl overflow-hidden">
+        <div className="flex items-center gap-6 rounded-3xl bg-[color:var(--color-surface)] p-6 shadow-sm ring-1 ring-[color:var(--color-divider)]">
+          <div className="h-20 w-20 overflow-hidden rounded-2xl">
             <img
               src={restaurant.image}
               alt={restaurant.name}
@@ -82,29 +82,30 @@ const Cart = () => {
           </div>
 
           <div className="flex-1">
-            <h2 className="text-2xl font-black text-slate-900">
+            <h2 className="font-display text-[20px] font-extrabold text-[color:var(--color-charcoal)]">
               {restaurant.name}
             </h2>
 
-            <div className="flex items-center gap-2 text-sm text-slate-500 mt-1">
+            <div className="mt-1 flex items-center gap-2 text-xs text-[color:var(--color-text-secondary)]">
               <MapPin size={14} />
               <span>
                 {restaurant.autoLocation?.formattedAddress?.split(",")[0]}
               </span>
             </div>
 
-            <div className="flex items-center gap-3 mt-2">
+            <div className="mt-2 flex items-center gap-3">
               <span
-                className={`text-xs px-3 py-1 rounded-full font-semibold ${restaurant.isOpen
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-600"
-                  }`}
+                className={`text-xs px-3 py-1 rounded-full font-semibold ${
+                  restaurant.isOpen
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-600"
+                }`}
               >
                 {restaurant.isOpen ? "Open" : "Closed"}
               </span>
 
               {restaurant.isVerified && (
-                <span className="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-600 font-semibold">
+                <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600">
                   Verified
                 </span>
               )}
@@ -112,20 +113,20 @@ const Cart = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="grid gap-6 lg:grid-cols-3">
 
-          <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-6">
-            <h3 className="text-xl font-bold text-slate-900">
-              Cart Items
+          <div className="lg:col-span-2 space-y-4 rounded-3xl bg-[color:var(--color-surface)] p-5 shadow-sm ring-1 ring-[color:var(--color-divider)]">
+            <h3 className="text-[18px] font-bold text-[color:var(--color-charcoal)]">
+              Cart items
             </h3>
 
             {cart.items.map((item: any) => (
               <div
                 key={item._id}
-                className="flex items-center justify-between gap-6 border-b pb-6 last:border-none last:pb-0"
+                className="flex items-center justify-between gap-4 border-b border-[color:var(--color-divider)] pb-4 last:border-b-0 last:pb-0"
               >
-                <div className="flex items-center gap-5">
-                  <div className="w-20 h-20 rounded-2xl overflow-hidden">
+                <div className="flex items-center gap-4">
+                  <div className="h-16 w-16 overflow-hidden rounded-2xl">
                     <img
                       src={item.itemId.image.url || item.itemId.image}
                       alt={item.itemId.name}
@@ -134,43 +135,43 @@ const Cart = () => {
                   </div>
 
                   <div>
-                    <h4 className="font-bold text-slate-900">
+                    <h4 className="text-sm font-semibold text-[color:var(--color-charcoal)]">
                       {item.itemId.name}
                     </h4>
-                    <p className="text-sm text-slate-500">
+                    <p className="font-price text-xs font-semibold text-[color:var(--color-text-secondary)]">
                       ₹ {item.itemId.price}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-6">
-                  <div className="flex items-center bg-slate-100 rounded-xl px-2 py-1">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center rounded-full bg-[color:var(--color-divider)] px-2 py-1">
                     <button
                       onClick={() => decrementQty(item.itemId._id)}
-                      className="p-1 hover:bg-white rounded-lg transition"
+                      className="rounded-full p-1 transition hover:bg-[color:var(--color-surface)]"
                     >
                       <Minus size={16} />
                     </button>
 
-                    <span className="px-4 font-bold text-slate-900">
+                    <span className="px-3 text-sm font-semibold text-[color:var(--color-charcoal)]">
                       {item.quantity}
                     </span>
 
                     <button
                       onClick={() => incrementQty(item.itemId._id)}
-                      className="p-1 hover:bg-white rounded-lg transition"
+                      className="rounded-full p-1 transition hover:bg-[color:var(--color-surface)]"
                     >
                       <Plus size={16} />
                     </button>
                   </div>
 
-                  <p className="font-bold text-slate-900 w-20 text-right">
+                  <p className="w-20 text-right font-price text-sm font-bold text-[color:var(--color-charcoal)]">
                     ₹ {item.itemId.price * item.quantity}
                   </p>
 
                   <button
                     onClick={() => removeFromCart(item.itemId._id)}
-                    className="text-slate-400 hover:text-red-500 transition"
+                    className="text-[color:var(--color-text-secondary)] transition hover:text-[color:var(--color-brand-red)]"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -179,49 +180,55 @@ const Cart = () => {
             ))}
           </div>
 
-          <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 h-fit sticky top-28">
-            <h3 className="text-xl font-bold text-slate-900 mb-6">
-              Order Summary
+          <div className="sticky top-24 h-fit space-y-4 rounded-3xl bg-[color:var(--color-surface)] p-5 shadow-sm ring-1 ring-[color:var(--color-divider)]">
+            <h3 className="mb-3 text-[18px] font-bold text-[color:var(--color-charcoal)]">
+              Bill details
             </h3>
 
+            {/* <div className="rounded-2xl bg-[color:var(--color-bg-blush)]/60 p-3 text-xs text-[color:var(--color-text-secondary)]">
+              <div className="flex items-center gap-2">
+                <Scissors className="h-3.5 w-3.5" />
+                <span>Have a promo code? Apply it on the next step.</span>
+              </div>
+            </div> */}
+
             <div className="space-y-4 text-sm">
-              <div className="flex justify-between text-slate-600">
-                <span>Subtotal</span>
-                <span>₹ {subTotal}</span>
+              <div className="flex justify-between text-[color:var(--color-text-secondary)]">
+                <span>Item total</span>
+                <span className="font-price font-semibold">₹ {subTotal}</span>
               </div>
 
-              <div className="flex justify-between text-slate-600">
-                <span>Delivery Fee</span>
-                <span>₹ {deliveryFee}</span>
+              <div className="flex justify-between text-[color:var(--color-text-secondary)]">
+                <span>Delivery partner fee</span>
+                <span className="font-price font-semibold">
+                  ₹ {deliveryFee}
+                </span>
               </div>
 
-              <div className="flex justify-between text-slate-600">
-                <span>Taxes</span>
-                <span>₹ {tax}</span>
+              <div className="flex justify-between text-[color:var(--color-text-secondary)]">
+                <span>Taxes and charges</span>
+                <span className="font-price font-semibold">₹ {tax}</span>
               </div>
 
-              <div className="border-t pt-4 flex justify-between font-black text-lg text-slate-900">
-                <span>Total</span>
-                <span>₹ {total}</span>
+              <div className="mt-2 border-t border-[color:var(--color-divider)] pt-3">
+                <div className="flex justify-between text-sm font-bold text-[color:var(--color-charcoal)]">
+                  <span>To pay</span>
+                  <span className="font-price text-base">₹ {total}</span>
+                </div>
               </div>
 
               {subTotal < 300 && (
-                <p className="text-sm text-gray-500">
-                  Add items worth ₹{300 - subTotal} more to get Free delivery
+                <p className="text-xs text-[color:var(--color-text-secondary)]">
+                  Add items worth ₹{300 - subTotal} more to get free delivery.
                 </p>
               )}
             </div>
 
             <button
               disabled={!restaurant.isOpen}
-              className={`w-full mt-8 py-3 rounded-2xl font-bold transition-all ${restaurant.isOpen
-                ? "bg-[#E23744] hover:bg-black text-white"
-                : "bg-slate-300 text-slate-500 cursor-not-allowed"
-                }`}
+              className="btn-primary mt-4"
             >
-              {restaurant.isOpen
-                ? "Proceed to Checkout"
-                : "Restaurant Closed"}
+              {restaurant.isOpen ? "Place order" : "Restaurant closed"}
             </button>
           </div>
         </div>

@@ -15,20 +15,20 @@ const OrderRow = ({ order }: { order: IOrder }) => {
     };
 
     return (
-        <div onClick={() => navigate(`/order/${order._id}`)} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-slate-50 rounded-3xl border border-slate-100 hover:border-slate-200 transition-all">
+        <div onClick={() => navigate(`/order/${order._id}`)} className="flex flex-col justify-between gap-3 rounded-3xl border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] p-4 text-xs shadow-sm transition hover:border-[color:var(--color-brand-red)]/40 md:flex-row md:items-center">
             <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-400 border border-slate-100">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-[color:var(--color-divider)] bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]">
                     <Package size={20} />
                 </div>
                 <div>
-                    <p className="font-bold text-slate-900">Order #{order._id.slice(-6)}</p>
-                    <p className="text-xs text-slate-500 font-medium">{formattedDate(new Date(order.createdAt))}</p>
+                    <p className="text-[13px] font-semibold text-[color:var(--color-charcoal)]">Order #{order._id.slice(-6)}</p>
+                    <p className="text-[11px] font-medium text-[color:var(--color-text-secondary)]">{formattedDate(new Date(order.createdAt))}</p>
                 </div>
             </div>
             <div className="flex items-center justify-between md:justify-end gap-8 mt-4 md:mt-0">
                 <div className="text-right">
-                    <p className="font-black text-slate-900">₹{order.total}</p>
-                    <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded-md ${statusColor(order.status)}`}>{order.status.replaceAll("_", " ")}</span>
+                    <p className="font-price text-sm font-bold text-[color:var(--color-charcoal)]">₹{order.total}</p>
+                    <span className={`mt-1 inline-flex items-center justify-end rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${statusColor(order.status)}`}>{order.status.replaceAll("_", " ")}</span>
                 </div>
             </div>
         </div>

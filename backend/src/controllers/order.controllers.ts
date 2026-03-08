@@ -242,7 +242,7 @@ export const getMyOrders = async (req: Request, res: Response) => {
     }
 };
 
-export const fetchedSingleOrder = async (req: Request, res: Response) => {
+export const fetchedSingleCustomerOrder = async (req: Request, res: Response) => {
     try {
         if (req.user?.role !== "customer") {
             return res.status(403).json({ msg: "Forbidden: customer role required" })
