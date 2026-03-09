@@ -132,3 +132,31 @@ export const userprofileController = async (req: Request, res: Response) => {
         return res.status(500).json({ msg: "Internal server error" });
     }
 };
+
+export const logoutController = async (req: Request, res: Response) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.user?._id, {
+            $set: {
+                refreshToken: null
+            }
+        });
+
+        if (!user) {
+            return res.status(400).json({ msg: "User not found" })
+        };
+
+        return res.status(200)
+            .clearCookie("accessToken", {
+                httpOnly: true,
+                secure: true
+            })
+            .clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: true,
+            })
+            .json({ success: true, msg: "user logged out successfully" })
+    } catch (error) {
+        console.log("Error while logged out", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    };
+}

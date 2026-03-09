@@ -21,10 +21,11 @@ const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
         return () => {
             clearInterval(interval)
         }
-    }, [secondsLeft]);
+    }, []);
 
     const acceptOrder = async () => {
         try {
+            setAccepting(true);
             const res = await axiosInstance.put(`/api/v1/rider/accept/${orderId}`);
 
             if (res.status === 200) {
@@ -34,6 +35,8 @@ const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
             if (axios.isAxiosError(error)) {
                 toast.error(error.response?.data.msg)
             }
+        } finally{
+            setAccepting(false);
         }
     }
 
@@ -49,7 +52,7 @@ const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
                 Order ID: <b>{orderId.slice(-6)}</b>
             </p>
 
-            <button disabled={accepting} onClick={acceptOrder} className='w-full rounded-lg bg-green-600 py-2 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-50'>
+            <button disabled={accepting || secondsLeft === 0} onClick={acceptOrder} className='w-full rounded-lg bg-green-600 py-2 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-50'>
                 {accepting ? "Accepting..." : "Accept Order"}
             </button>
         </div>

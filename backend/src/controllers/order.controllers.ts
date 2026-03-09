@@ -318,7 +318,7 @@ export const updateOrderStatusForRider = async (req: Request, res: Response) => 
             return res.status(404).json({ msg: "rider not found" })
         };
 
-        const { orderId } = req.params;
+        const { orderId } = req.body;
         if (!mongoose.Types.ObjectId.isValid(orderId as string)) {
             return res.status(400).json({ msg: "Invalid order id format" })
         };
@@ -341,7 +341,9 @@ export const updateOrderStatusForRider = async (req: Request, res: Response) => 
             io.to(`user:${order.userId}`).emit("order:rider_assigned", order);
 
             io.to(`restaurant:${order.restaurantId}`).emit("order:rider_assigned", order);
-        }
+
+            return res.status(200).json({ msg: "Order updated successfully", order })
+        };
 
         if (order.status === "picked_up") {
             order.status = "delivered"
@@ -352,11 +354,12 @@ export const updateOrderStatusForRider = async (req: Request, res: Response) => 
             io.to(`user:${order.userId}`).emit("order:rider_assigned", order);
 
             io.to(`restaurant:${order.restaurantId}`).emit("order:rider_assigned", order);
-        }
+            return res.status(200).json({ msg: "Order updated successfully", order })
+        };
 
-        return res.status(200).json({ msg: "Order updated successfully", order })
+        return res.status(400).json({ msg: "Invalid status transition" });
     } catch (error) {
         console.log("Error while updating current order", error);
         return res.status(500).json({ msg: "Internal server error" })
     }
-}
+};

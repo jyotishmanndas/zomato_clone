@@ -43,7 +43,7 @@ interface Items {
 }
 
 export interface IOrder {
-    _id:string;
+    _id: string;
     userId: string;
     restaurantId: string;
     restaurantName: string;
@@ -82,11 +82,11 @@ export interface IOrder {
 
 
 export interface IRider {
-    _id:string
+    _id: string
     picture: string;
     mobile: string;
     aadhaarNumber: string;
     drivingLicenceNumber: string;
     isVerified: boolean;
-    isAvailable:boolean
+    isAvailable: boolean
 }

@@ -11,10 +11,11 @@ router.get("/getOrders", getMyOrders);
 router.get("/get/:orderId", fetchedSingleCustomerOrder);
 
 router.patch("/update/:orderId", updateOrderStatus);
-router.get("/:restaurantId", fetchedRestaurantOrders);
 
-router.get("/getRiderOrders", getCurrentOrdersForRiders);
 router.patch("/rider/update/status", updateOrderStatusForRider);
+router.get("/getRiderOrders", getCurrentOrdersForRiders);
+
+router.get("/:restaurantId", fetchedRestaurantOrders);
 
 
 export default router

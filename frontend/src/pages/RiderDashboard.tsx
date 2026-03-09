@@ -8,12 +8,16 @@ import riderAudio from "../assets/riderAudio.mp3";
 import { useSocket } from "../hooks/useSocket";
 import RiderOrderRequest from "../components/RiderOrderRequest";
 import { Bike, ShieldCheck } from "lucide-react";
+import { useRiderOrderApi } from "../hooks/useOrderApi";
+import RiderCurrentOrder from "../components/RiderCurrentOrder";
+import type { IOrder } from "../types";
 
 const RiderDashboard = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [incomingOrders, setIncomingOrders] = useState<string[]>([]);
   const [audioUnlocked, setAudioUnlocked] = useState(false);
   const { data, isLoading } = useRiderProfile();
+  const { data: currentRiderOrder } = useRiderOrderApi();
   const socketRef = useSocket();
 
   useEffect(() => {
@@ -126,9 +130,8 @@ const RiderDashboard = () => {
           </div>
           <div className="flex items-center gap-2 rounded-full bg-[color:var(--color-bg-blush)] px-3 py-1">
             <span
-              className={`inline-flex h-2 w-2 rounded-full ${
-                data.isAvailable ? "bg-[color:var(--color-success)]" : "bg-red-500"
-              }`}
+              className={`inline-flex h-2 w-2 rounded-full ${data.isAvailable ? "bg-[color:var(--color-success)]" : "bg-red-500"
+                }`}
             />
             <span className="text-xs font-medium text-[color:var(--color-text-secondary)]">
               {data.isAvailable ? "Online" : "Offline"}
@@ -137,7 +140,6 @@ const RiderDashboard = () => {
         </header>
 
         <main className="grid gap-5 md:grid-cols-[1.4fr,1.6fr]">
-          {/* Rider profile card */}
           <section className="space-y-4 rounded-3xl bg-[color:var(--color-surface)] p-5 shadow-sm ring-1 ring-[color:var(--color-divider)]">
             <div className="flex items-center gap-4">
               <img
@@ -152,11 +154,10 @@ const RiderDashboard = () => {
                 </p>
                 <p className="mt-1 flex items-center gap-1 text-[11px] text-[color:var(--color-text-secondary)]">
                   <ShieldCheck
-                    className={`h-3.5 w-3.5 ${
-                      data.isVerified
-                        ? "text-[color:var(--color-success)]"
-                        : "text-[color:var(--color-text-secondary)]"
-                    }`}
+                    className={`h-3.5 w-3.5 ${data.isVerified
+                      ? "text-[color:var(--color-success)]"
+                      : "text-[color:var(--color-text-secondary)]"
+                      }`}
                   />
                   {data.isVerified ? "Verified partner" : "Verification pending"}
                 </p>
@@ -186,7 +187,6 @@ const RiderDashboard = () => {
             </button>
           </section>
 
-          {/* Notifications + incoming orders */}
           <section className="space-y-4">
             {!audioUnlocked && (
               <div className="flex items-center justify-between gap-3 rounded-3xl bg-blue-50 p-4 text-xs text-blue-900 ring-1 ring-blue-100">
@@ -227,17 +227,22 @@ const RiderDashboard = () => {
                 )}
               </div>
 
-              {data.isAvailable && incomingOrders.length > 0 ? (
+              {data.isAvailable && incomingOrders.length > 0 && (
                 <div className="space-y-3">
                   {incomingOrders.map((orderId) => (
                     <RiderOrderRequest key={orderId} orderId={orderId} />
                   ))}
                 </div>
-              ) : (
-                <p className="text-xs text-[color:var(--color-text-secondary)]">
-                  No active requests right now. You’ll see new orders here when
-                  restaurants nearby assign them to you.
-                </p>
+              )}
+
+              {currentRiderOrder && (
+                <div className="flex items-center gap-3">
+                  {currentRiderOrder.map((order:IOrder) => (
+                    <div className="mx-auto max-w-md px-4 space-y-4">
+                      <RiderCurrentOrder order={order} />
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </section>
@@ -248,3 +253,9 @@ const RiderDashboard = () => {
 };
 
 export default RiderDashboard;
+
+
+{/* <p className="text-xs text-[color:var(--color-text-secondary)]">
+No active requests right now. You’ll see new orders here when
+restaurants nearby assign them to you.
+</p> */}
