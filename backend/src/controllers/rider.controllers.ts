@@ -175,7 +175,7 @@ export const accepOrder = async (req: Request, res: Response) => {
         };
 
         await Rider.findByIdAndUpdate(rider._id, {
-            isAvailable:false
+            isAvailable: false
         })
 
         const io = getIO();

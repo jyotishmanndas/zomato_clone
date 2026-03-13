@@ -158,7 +158,7 @@ const Address = () => {
             setAdding(false);
         }
     };
-    // 🗑 Delete address
+    
     const deleteAddress = async (id: string) => {
         if (!window.confirm("Delete this address?")) return;
         try {

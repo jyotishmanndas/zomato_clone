@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 import Login from './pages/Login'
 import { axiosInstance } from './config/axiosInstance'
 import { useAppDispatch, useAppSelector } from './hooks/useRedux'
@@ -21,6 +21,7 @@ import Checkout from './pages/Checkout'
 import { useSocket } from './hooks/useSocket'
 import OrderPage from './pages/OrderPage'
 import RiderDashboard from './pages/RiderDashboard'
+import PaymentSuccess from './pages/PaymentSuccess'
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +44,7 @@ const App = () => {
     <>
       <Routes>
         <Route element={<AuthLayout />}>
+          <Route path='/' element={<PublicRoute><Navigate to="/login" /></PublicRoute>} />
           <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
           <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path='/address' element={<ProtectedRoute><Address /></ProtectedRoute>} />
@@ -51,6 +53,7 @@ const App = () => {
           <Route path='/restaurant/:id' element={<ProtectedRoute><RestaurantPage /></ProtectedRoute>} />
           <Route path='/cart' element={<ProtectedRoute><Cart /></ProtectedRoute>} />
           <Route path='/checkout' element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+          <Route path='/paymentsuccess/:paymentId' element={<ProtectedRoute><PaymentSuccess /></ProtectedRoute>} />
         </Route>
         <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
         <Route path='/restaurant' element={<SellerRoute><Restaurant /></SellerRoute>} />

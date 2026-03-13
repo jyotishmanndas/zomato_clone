@@ -4,8 +4,10 @@ import { useFetchedCart } from "../hooks/useCartApi";
 import { axiosInstance } from "../config/axiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const Cart = () => {
+  const navigate = useNavigate()
   const { data, isLoading } = useFetchedCart();
   const queryClient = useQueryClient();
 
@@ -95,11 +97,10 @@ const Cart = () => {
 
             <div className="mt-2 flex items-center gap-3">
               <span
-                className={`text-xs px-3 py-1 rounded-full font-semibold ${
-                  restaurant.isOpen
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-600"
-                }`}
+                className={`text-xs px-3 py-1 rounded-full font-semibold ${restaurant.isOpen
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-600"
+                  }`}
               >
                 {restaurant.isOpen ? "Open" : "Closed"}
               </span>
@@ -226,6 +227,7 @@ const Cart = () => {
 
             <button
               disabled={!restaurant.isOpen}
+              onClick={() => navigate("/checkout")}
               className="btn-primary mt-4"
             >
               {restaurant.isOpen ? "Place order" : "Restaurant closed"}

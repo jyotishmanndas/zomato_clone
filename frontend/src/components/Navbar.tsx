@@ -49,10 +49,9 @@ const Navbar = () => {
             <div className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[color:var(--color-surface)] text-[color:var(--color-brand-red)] shadow-sm">
               <ShoppingCart className="h-4 w-4" />
             </div>
-            {/* Cart count is not wired yet, keep as subtle dot */}
-            <span className="absolute -right-0.5 -top-0.5 h-[14px] w-[14px] rounded-full border border-[color:var(--color-surface)] bg-[color:var(--color-brand-red)] text-[10px] font-semibold text-white flex items-center justify-center">
+            {/* <span className="absolute -right-0.5 -top-0.5 h-[14px] w-[14px] rounded-full border border-[color:var(--color-surface)] bg-[color:var(--color-brand-red)] text-[10px] font-semibold text-white flex items-center justify-center">
               0
-            </span>
+            </span> */}
           </Link>
 
           {user ? (
