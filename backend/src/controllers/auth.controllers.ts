@@ -152,11 +152,13 @@ export const logoutController = async (req: Request, res: Response) => {
         return res.status(200)
             .clearCookie("accessToken", {
                 httpOnly: true,
-                secure: true
+                secure: true,
+                sameSite: "none",
             })
             .clearCookie("refreshToken", {
                 httpOnly: true,
                 secure: true,
+                sameSite: "none",
             })
             .json({ success: true, msg: "user logged out successfully" })
     } catch (error) {
