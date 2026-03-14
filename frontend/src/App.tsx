@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Navigate, Route, Routes } from 'react-router'
+import { Route, Routes } from 'react-router'
 import Login from './pages/Login'
 import { axiosInstance } from './config/axiosInstance'
 import { useAppDispatch, useAppSelector } from './hooks/useRedux'

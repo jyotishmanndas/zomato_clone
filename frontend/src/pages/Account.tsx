@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { User, Package, MapPin, LogOut, ChevronRight } from 'lucide-react';
 import { useAppSelector } from '../hooks/useRedux';
 import Profile from '../components/AccountDetails/Profile';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { IOrder } from '../types'
 import { axiosInstance } from '../config/axiosInstance';
 import toast from 'react-hot-toast';

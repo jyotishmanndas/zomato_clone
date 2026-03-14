@@ -1,4 +1,3 @@
-import React from "react";
 import type { Restaurant } from "../types";
 import { Clock, Dot, MapPin } from "lucide-react";
 

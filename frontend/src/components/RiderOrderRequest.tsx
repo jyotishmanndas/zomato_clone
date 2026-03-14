@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { axiosInstance } from '../config/axiosInstance';
 import toast from 'react-hot-toast';
 import axios from 'axios';

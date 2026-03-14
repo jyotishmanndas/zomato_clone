@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks/useRedux";
 import { axiosInstance } from "../config/axiosInstance";
 import { useSearchParams } from "react-router";
