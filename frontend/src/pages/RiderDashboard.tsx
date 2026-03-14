@@ -29,6 +29,9 @@ const RiderDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  console.log(currentRiderOrder);
+  
+
   useEffect(() => {
     audioRef.current = new Audio(riderAudio);
     audioRef.current.preload = "auto";

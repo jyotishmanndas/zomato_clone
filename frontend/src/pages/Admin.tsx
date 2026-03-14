@@ -17,7 +17,6 @@ const Admin = () => {
     const { data: restaurant } = useFetchedUnVerifiedRestaurant();
     const { data: rider } = useFetchedUnVerifiedRider();
 
-    // VERIFY RESTAURANT
     const verifyRestaurant = async (id: string) => {
         try {
             setLoadingId(id);
@@ -42,7 +41,6 @@ const Admin = () => {
         }
     };
 
-    // VERIFY RIDER
     const verifyRider = async (id: string) => {
         try {
             setLoadingId(id);

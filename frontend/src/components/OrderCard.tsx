@@ -28,7 +28,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
         return () => {
             clearTimeout(timer)
         }
-    }, [order.status])
+    }, [order.status, order._id])
 
     const updateStatus = async (status: string) => {
         try {

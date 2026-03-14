@@ -42,7 +42,7 @@ export const loginController = async (req: Request, res: Response) => {
             .cookie("accessToken", accessToken, {
                 httpOnly: true,
                 secure: true,
-                maxAge: 15 * 60 * 1000
+                maxAge: 24 * 60 * 60 * 1000
             })
             .cookie("refreshToken", refreshToken, {
                 httpOnly: true,
@@ -93,7 +93,7 @@ export const addRole = async (req: Request, res: Response) => {
             .cookie("accessToken", accessToken, {
                 httpOnly: true,
                 secure: true,
-                maxAge: 15 * 60 * 1000
+                maxAge: 24 * 60 * 60 * 1000
             })
             .cookie("refreshToken", refreshToken, {
                 httpOnly: true,

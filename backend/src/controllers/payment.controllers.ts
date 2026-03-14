@@ -56,7 +56,7 @@ export const verifyRazorpayPayment = async (req: Request, res: Response) => {
 
         return res.status(200).json({ msg: "payment verified successfully" })
     } catch (error) {
-        console.log("Error while verify payment");
+        console.log("Error while verify payment", error);
         return res.status(500).json({ msg: "Internal server error" })
     }
 }

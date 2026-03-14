@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
     const [accepting, setAccepting] = useState(false);
-    const [secondsLeft, setSecondLeft] = useState(20);
+    const [secondsLeft, setSecondLeft] = useState(10);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -16,7 +16,7 @@ const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
                 }
                 return prev - 1
             })
-        }, 20000);
+        }, 1000);
 
         return () => {
             clearInterval(interval)

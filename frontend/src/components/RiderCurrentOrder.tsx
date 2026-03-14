@@ -4,12 +4,15 @@ import { axiosInstance } from "../config/axiosInstance";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { MapPin, Store, Phone, IndianRupee } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface RiderCurrentOrderProps {
     order: IOrder;
 }
 
 const RiderCurrentOrder = ({ order }: RiderCurrentOrderProps) => {
+    const queryClient = useQueryClient();
+
     const updateStatus = async () => {
         try {
             const res = await axiosInstance.patch(
@@ -19,6 +22,9 @@ const RiderCurrentOrder = ({ order }: RiderCurrentOrderProps) => {
 
             if (res.status === 200) {
                 toast.success(res.data.msg);
+                queryClient.invalidateQueries({
+                    queryKey: ["riderorder"],
+                });
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {

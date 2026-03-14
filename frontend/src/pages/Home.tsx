@@ -4,31 +4,6 @@ import { axiosInstance } from "../config/axiosInstance";
 import { useSearchParams } from "react-router";
 import RestaurantCard from "../components/RestaurantCard";
 
-const categories = [
-  { id: "biryani", label: "Biryani", emoji: "🍛" },
-  { id: "pizza", label: "Pizza", emoji: "🍕" },
-  { id: "burger", label: "Burger", emoji: "🍔" },
-  { id: "dessert", label: "Desserts", emoji: "🍰" },
-  { id: "northindian", label: "North Indian", emoji: "🍲" },
-  { id: "chinese", label: "Chinese", emoji: "🥡" },
-  { id: "southindian", label: "South Indian", emoji: "🥘" },
-];
-
-const heroSlides = [
-  {
-    id: 1,
-    title: "Flat 50% OFF",
-    subtitle: "on your first 2 orders",
-    caption: "No cooking today. We got you.",
-  },
-  {
-    id: 2,
-    title: "Late night cravings?",
-    subtitle: "Order till 2 AM",
-    caption: "Your favourite kitchens, always on.",
-  },
-];
-
 const Home = () => {
   const { location } = useAppSelector((state) => state.location);
   const [searchParams] = useSearchParams();
@@ -78,6 +53,9 @@ const Home = () => {
       console.log(error);
     }
   };
+
+  console.log(restaurants);
+  
 
   useEffect(() => {
     fetchRestaurant();
