@@ -39,7 +39,7 @@ const PaymentSuccess = () => {
                 <div className="mt-6 space-y-3">
 
                     <button
-                        onClick={() => navigate("/orders")}
+                        onClick={() => navigate("/account?tab=orders")}
                         className="btn-primary flex items-center justify-center gap-2"
                     >
                         <Package size={18} />
