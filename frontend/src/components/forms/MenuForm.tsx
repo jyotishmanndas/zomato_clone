@@ -25,7 +25,7 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
     const queryClient = useQueryClient();
 
     const form = useForm<z.infer<typeof createMenuSchema>>({
-        resolver: zodResolver(createMenuSchema),
+        resolver: zodResolver(createMenuSchema) as any,
         defaultValues: {
             name: "",
             description: "",
