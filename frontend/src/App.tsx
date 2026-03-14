@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import Login from './pages/Login'
 import { axiosInstance } from './config/axiosInstance'
@@ -22,6 +22,9 @@ import { useSocket } from './hooks/useSocket'
 import OrderPage from './pages/OrderPage'
 import RiderDashboard from './pages/RiderDashboard'
 import PaymentSuccess from './pages/PaymentSuccess'
+import { RiderRoute } from './components/RiderRoute'
+import RoleRedirect from './components/RoleDirect'
+import Admin from './pages/Admin'
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -44,7 +47,7 @@ const App = () => {
     <>
       <Routes>
         <Route element={<AuthLayout />}>
-          <Route path='/' element={<PublicRoute><Navigate to="/login" /></PublicRoute>} />
+          <Route path="/" element={<ProtectedRoute><RoleRedirect /></ProtectedRoute>} />
           <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
           <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path='/address' element={<ProtectedRoute><Address /></ProtectedRoute>} />
@@ -58,7 +61,8 @@ const App = () => {
         <Route path='/select-role' element={<ProtectedRoute><SelectRole /></ProtectedRoute>} />
         <Route path='/restaurant' element={<SellerRoute><Restaurant /></SellerRoute>} />
         <Route path='/create-restaurant' element={<SellerRoute><AddRestaurantForm /></SellerRoute>} />
-        <Route path='/rider' element={<RiderDashboard />} />
+        <Route path='/rider' element={<RiderRoute><RiderDashboard /></RiderRoute>} />
+        <Route path='/admin' element={<ProtectedRoute><Admin /></ProtectedRoute>} />
       </Routes>
     </>
   )

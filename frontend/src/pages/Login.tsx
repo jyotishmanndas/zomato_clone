@@ -20,7 +20,15 @@ const Login = () => {
       if (res.status === 200) {
         dispatch(setUser(res.data.data));
         toast.success(res.data.msg);
-        navigate("/home");
+        if (res.data.data.role === "customer") {
+          navigate("/home");
+        } else if (res.data.data.role === "seller") {
+          navigate("/restaurant");
+        } else if (res.data.data.role === "rider") {
+          navigate("/rider");
+        } else {
+          navigate("/select-role")
+        }
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

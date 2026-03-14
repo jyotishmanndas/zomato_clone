@@ -141,11 +141,10 @@ const Checkout = () => {
               </div>
               <div className="mt-2 flex items-center gap-2 text-[11px]">
                 <span
-                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                    restaurant.isOpen
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-600"
-                  }`}
+                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${restaurant.isOpen
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-600"
+                    }`}
                 >
                   {restaurant.isOpen ? "Open" : "Closed"}
                 </span>
@@ -160,17 +159,28 @@ const Checkout = () => {
         </section>
 
         <section className="grid gap-6 md:grid-cols-[1.6fr,1.4fr]">
-          {/* Delivery address selection */}
           <div className="space-y-4 rounded-3xl bg-[color:var(--color-surface)] p-5 shadow-sm ring-1 ring-[color:var(--color-divider)]">
             <h2 className="text-sm font-semibold text-[color:var(--color-charcoal)]">
               Delivery address
             </h2>
 
             {address.length === 0 ? (
-              <p className="text-xs text-[color:var(--color-text-secondary)]">
-                No saved addresses found. Add an address from your profile or
-                the address screen.
-              </p>
+              <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[color:var(--color-divider)] p-6 text-center">
+
+                <MapPin className="text-[color:var(--color-text-secondary)]" size={28} />
+
+                <p className="text-xs text-[color:var(--color-text-secondary)]">
+                  No saved addresses found
+                </p>
+
+                <button
+                  onClick={() => navigate("/address")}
+                  className="rounded-full bg-[color:var(--color-brand-red)] px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90"
+                >
+                  Add address
+                </button>
+
+              </div>
             ) : (
               <div className="space-y-3">
                 {address.map((addr: any) => (
@@ -178,11 +188,10 @@ const Checkout = () => {
                     key={addr._id}
                     type="button"
                     onClick={() => setSelectedAddressId(addr._id)}
-                    className={`w-full rounded-2xl border px-4 py-3 text-left text-xs transition ${
-                      selectedAddressId === addr._id
-                        ? "border-[color:var(--color-brand-red)] bg-[color:var(--color-bg-blush)]"
-                        : "border-[color:var(--color-divider)] bg-[color:var(--color-surface)] hover:border-[color:var(--color-brand-red)]/40"
-                    }`}
+                    className={`w-full rounded-2xl border px-4 py-3 text-left text-xs transition ${selectedAddressId === addr._id
+                      ? "border-[color:var(--color-brand-red)] bg-[color:var(--color-bg-blush)]"
+                      : "border-[color:var(--color-divider)] bg-[color:var(--color-surface)] hover:border-[color:var(--color-brand-red)]/40"
+                      }`}
                   >
                     <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--color-text-secondary)]">
                       {addr.label || "Address"}

@@ -8,10 +8,12 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { Camera, IdCard, Phone, X } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 const RiderProfileForm = () => {
     const [preview, setPreview] = useState<string | null>(null);
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const form = useForm<z.infer<typeof createRiderSchema>>({
         resolver: zodResolver(createRiderSchema),
@@ -39,7 +41,7 @@ const RiderProfileForm = () => {
             const location = {
                 type: "Point",
                 coordinates: [longitude, latitude],
-              };
+            };
 
             const formData = new FormData();
 
@@ -65,6 +67,9 @@ const RiderProfileForm = () => {
                     form.reset();
                     setPreview(null);
                     navigate("/rider");
+                    queryClient.invalidateQueries({
+                        queryKey: ["rider"],
+                    });
                 }
             } catch (error) {
                 if (axios.isAxiosError(error)) {
