@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import { BrowserRouter } from "react-router";
-import { Toaster } from "react-hot-toast"
-=======
->>>>>>> fa06ddcfbe64714fc86e4573fc6982262fa0ff74
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import "leaflet/dist/leaflet.css";
