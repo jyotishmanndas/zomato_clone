@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "../hooks/useRedux";
 import { removeUser } from "../features/authSlice";
+import RiderOrderMap from "../components/RiderOrderMap";
 
 const RiderDashboard = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -29,8 +30,8 @@ const RiderDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  console.log(currentRiderOrder);
-  
+  // console.log(currentRiderOrder);
+
 
   useEffect(() => {
     audioRef.current = new Audio(riderAudio);
@@ -301,6 +302,8 @@ const RiderDashboard = () => {
                   {currentRiderOrder.map((order: IOrder) => (
                     <div className="mx-auto max-w-md px-4 space-y-4">
                       <RiderCurrentOrder order={order} />
+
+                      <RiderOrderMap order={currentRiderOrder} />
                     </div>
                   ))}
                 </div>

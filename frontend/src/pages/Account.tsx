@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { User, Package, MapPin, LogOut, ChevronRight } from 'lucide-react';
 import { useAppSelector } from '../hooks/useRedux';
 import Profile from '../components/AccountDetails/Profile';
@@ -7,15 +7,25 @@ import Address from '../components/AccountDetails/Address';
 import { axiosInstance } from '../config/axiosInstance';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { removeUser } from '../features/authSlice';
 
 const Account = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [activeTab, setActiveTab] = useState('profile');
     const { user } = useAppSelector(state => state.auth);
+
+    const [searchParams] = useSearchParams();
+    const tab = searchParams.get("tab");
+
+    const [activeTab, setActiveTab] = useState(tab || "profile");
+
+    useEffect(() => {
+        if (tab) {
+            setActiveTab(tab)
+        }
+    }, [tab])
 
     const menuItems = [
         { id: 'profile', label: 'My Profile', icon: User },
@@ -59,7 +69,7 @@ const Account = () => {
                                 {menuItems.map((item) => (
                                     <button
                                         key={item.id}
-                                        onClick={() => setActiveTab(item.id)}
+                                        onClick={() => navigate(`/account?tab=${item.id}`)}
                                         className={`flex w-full items-center gap-3 rounded-2xl px-4 py-2.5 text-xs font-semibold transition-all ${activeTab === item.id
                                             ? "bg-[color:var(--color-brand-red)] text-white"
                                             : "text-[color:var(--color-text-secondary)] hover:bg-[color:var(--color-bg-blush)]"

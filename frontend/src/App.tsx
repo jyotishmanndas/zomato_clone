@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Navigate, Route, Routes } from 'react-router'
+import { Route, Routes } from 'react-router'
 import Login from './pages/Login'
 import { axiosInstance } from './config/axiosInstance'
 import { useAppDispatch, useAppSelector } from './hooks/useRedux'
@@ -40,7 +40,14 @@ const App = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[color:var(--color-bg-blush)]">
+        <div className="spinner-ring" role="status" aria-label="Loading" />
+        <p className="text-sm font-medium text-[color:var(--color-text-secondary)]">
+          Loading your experience…
+        </p>
+      </div>
+    )
   }
 
   return (

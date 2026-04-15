@@ -105,8 +105,8 @@ const OrderPage = () => {
                 <div key={label} className="flex flex-1 flex-col items-center">
                   <div
                     className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold ${isCompleted
-                        ? "bg-[color:var(--color-brand-red)] text-white"
-                        : "bg-[color:var(--color-divider)] text-[color:var(--color-text-secondary)]"
+                      ? "bg-[color:var(--color-brand-red)] text-white"
+                      : "bg-[color:var(--color-divider)] text-[color:var(--color-text-secondary)]"
                       }`}
                   >
                     {index + 1}

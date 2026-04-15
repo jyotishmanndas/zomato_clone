@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
@@ -18,7 +17,27 @@ createRoot(document.getElementById('root')!).render(
       <Provider store={store}>
         <BrowserRouter>
           <App />
-          <Toaster />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 3200,
+              style: {
+                background: 'var(--color-surface)',
+                color: 'var(--color-charcoal)',
+                border: '1px solid var(--color-divider)',
+                borderRadius: '12px',
+                boxShadow: 'var(--shadow-card)',
+                fontSize: '14px',
+                fontWeight: 500,
+              },
+              success: {
+                iconTheme: { primary: '#26a541', secondary: '#fff' },
+              },
+              error: {
+                iconTheme: { primary: '#ff4d4f', secondary: '#fff' },
+              },
+            }}
+          />
         </BrowserRouter>
       </Provider>
     </QueryClientProvider>

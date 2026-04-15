@@ -1,5 +1,4 @@
-import { Edit2, Flame, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Edit2, Trash2 } from "lucide-react";
 // import { useMenuApi } from "../../hooks/useMenuApi";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
