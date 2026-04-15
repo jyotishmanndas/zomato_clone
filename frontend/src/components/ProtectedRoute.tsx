@@ -3,7 +3,7 @@ import { useAppSelector } from '../hooks/useRedux'
 import { Navigate, useLocation } from 'react-router'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAppSelector(state => state.auth)
+  const { user } = useAppSelector(state => state.auth)
   const { pathname } = useLocation()
 
   // if (loading) {

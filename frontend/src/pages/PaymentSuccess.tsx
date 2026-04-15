@@ -1,4 +1,3 @@
-import React from "react";
 import { CheckCircle, Package, Home } from "lucide-react";
 import { useParams, useNavigate } from "react-router";
 

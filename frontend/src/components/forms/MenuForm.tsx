@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -24,8 +24,10 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const queryClient = useQueryClient();
 
-    const form = useForm<z.infer<typeof createMenuSchema>>({
-        resolver: zodResolver(createMenuSchema),
+    type MenuFormValues = z.infer<typeof createMenuSchema>;
+
+    const form = useForm<MenuFormValues>({
+        resolver: zodResolver(createMenuSchema) as any,
         defaultValues: {
             name: "",
             description: "",

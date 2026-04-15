@@ -1,13 +1,21 @@
+<<<<<<< HEAD
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter } from "react-router";
 import { Toaster } from "react-hot-toast"
+=======
+>>>>>>> fa06ddcfbe64714fc86e4573fc6982262fa0ff74
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { Provider } from 'react-redux';
-import { store } from './store/store.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import "leaflet/dist/leaflet.css";
+import { createRoot } from 'react-dom/client';
+import { Toaster } from "react-hot-toast";
+import { Provider } from 'react-redux';
+import { BrowserRouter } from "react-router";
+import App from './App.tsx';
+import './index.css';
+import { store } from './store/store.ts';
 
 const queryClient = new QueryClient();
 

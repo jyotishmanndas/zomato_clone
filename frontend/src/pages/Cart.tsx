@@ -1,5 +1,4 @@
-import React from "react";
-import { Minus, Plus, Trash2, MapPin, Scissors } from "lucide-react";
+import { Minus, Plus, Trash2, MapPin } from "lucide-react";
 import { useFetchedCart } from "../hooks/useCartApi";
 import { axiosInstance } from "../config/axiosInstance";
 import { useQueryClient } from "@tanstack/react-query";

@@ -42,11 +42,13 @@ export const loginController = async (req: Request, res: Response) => {
             .cookie("accessToken", accessToken, {
                 httpOnly: true,
                 secure: true,
+                sameSite: "none",
                 maxAge: 24 * 60 * 60 * 1000
             })
             .cookie("refreshToken", refreshToken, {
                 httpOnly: true,
                 secure: true,
+                sameSite: "none",
                 maxAge: 3 * 24 * 60 * 60 * 1000
             })
             .json({
@@ -93,11 +95,13 @@ export const addRole = async (req: Request, res: Response) => {
             .cookie("accessToken", accessToken, {
                 httpOnly: true,
                 secure: true,
+                sameSite: "none",
                 maxAge: 24 * 60 * 60 * 1000
             })
             .cookie("refreshToken", refreshToken, {
                 httpOnly: true,
                 secure: true,
+                sameSite: "none",
                 maxAge: 3 * 24 * 60 * 60 * 1000
             }).json({
                 success: true, msg: "role updated successfully", data: {
@@ -148,11 +152,13 @@ export const logoutController = async (req: Request, res: Response) => {
         return res.status(200)
             .clearCookie("accessToken", {
                 httpOnly: true,
-                secure: true
+                secure: true,
+                sameSite: "none",
             })
             .clearCookie("refreshToken", {
                 httpOnly: true,
                 secure: true,
+                sameSite: "none",
             })
             .json({ success: true, msg: "user logged out successfully" })
     } catch (error) {

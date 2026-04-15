@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAppDispatch } from './useRedux';
 import { setCity, setLocation } from '../features/locationSlice';
 import { axiosInstance } from '../config/axiosInstance';
