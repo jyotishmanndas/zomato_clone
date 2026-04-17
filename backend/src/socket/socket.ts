@@ -30,6 +30,13 @@ export const initSocket = (server: http.Server) => {
         console.log("user connected", socket.data.user._id);
         console.log("socket connected", [...socket.rooms]);
 
+        socket.on("rider:location", ({ userId, latitude, longitude }) => {
+            io.to(`user:${userId}`).emit("rider:location", {
+                latitude,
+                longitude
+            });
+        });
+
         socket.on("disconnect", () => {
             console.log(`user disconnected:${user._id}`);
 
