@@ -2,7 +2,7 @@ import type { IOrder } from "../types";
 import { axiosInstance } from "../config/axiosInstance";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { MapPin, Store, Phone, IndianRupee } from "lucide-react";
+import { Clock3, IndianRupee, MapPin, Phone, Route, Store } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface RiderCurrentOrderProps {
@@ -11,6 +11,22 @@ interface RiderCurrentOrderProps {
 
 const RiderCurrentOrder = ({ order }: RiderCurrentOrderProps) => {
     const queryClient = useQueryClient();
+
+    const formatINR = (value: number) =>
+        new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0,
+        }).format(value || 0);
+
+    const prettyStatus = (status: string) => status.replaceAll("_", " ");
+
+    const statusPillClass = () => {
+        if (order.status === "rider_assigned") return "bg-amber-50 text-amber-700 ring-amber-200";
+        if (order.status === "picked_up") return "bg-blue-50 text-blue-700 ring-blue-200";
+        if (order.status === "delivered") return "bg-emerald-50 text-emerald-700 ring-emerald-200";
+        return "bg-gray-50 text-gray-700 ring-gray-200";
+    };
 
     const updateStatus = async () => {
         try {
@@ -33,91 +49,119 @@ const RiderCurrentOrder = ({ order }: RiderCurrentOrderProps) => {
     };
 
     return (
-        <div className="bg-white rounded-2xl shadow-md p-6 max-w-xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-800">Current Delivery</h2>
-                <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-600 capitalize">
-                    {order.status.replaceAll("_", " ")}
+        <div className="rounded-3xl bg-surface p-5 shadow-sm ring-1 ring-divider">
+            <div className="flex items-start justify-between gap-3">
+                <div>
+                    <p className="text-[11px] font-semibold text-text-secondary">
+                        Current order
+                    </p>
+                    <p className="mt-1 text-sm font-extrabold text-charcoal">
+                        {order.restaurantName}
+                    </p>
+                    <p className="mt-1 text-[11px] text-text-secondary">
+                        Order ID: <span className="font-semibold text-charcoal">#{String(order._id).slice(-6).toUpperCase()}</span>
+                    </p>
+                </div>
+
+                <span
+                    className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-bold capitalize ring-1 ${statusPillClass()}`}
+                >
+                    <Clock3 className="h-3.5 w-3.5" />
+                    {prettyStatus(order.status)}
                 </span>
             </div>
 
-            <div className="flex gap-3 items-start">
-                <div className="p-2 bg-orange-100 rounded-lg">
-                    <Store className="text-orange-600" size={18} />
-                </div>
+            <div className="mt-4 grid gap-3">
+                <div className="rounded-2xl bg-bg-blush p-4 ring-1 ring-divider">
+                    <div className="flex items-start gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/70 text-brand-red ring-1 ring-divider">
+                            <Store className="h-5 w-5" />
+                        </div>
 
-                <div>
-                    <p className="text-sm text-gray-500">Pickup Restaurant</p>
-                    <p className="font-semibold text-gray-800">{order.restaurantName}</p>
-                </div>
-            </div>
-
-            <div className="flex gap-3 items-start">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                    <MapPin className="text-blue-600" size={18} />
-                </div>
-
-                <div>
-                    <p className="text-sm text-gray-500">Delivery Address</p>
-                    <p className="font-semibold text-gray-800">
-                        {order.deliveryAddress.formattedAddress}
-                    </p>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 bg-gray-50 rounded-xl p-4">
-                <div>
-                    <p className="text-sm text-gray-500">Order Total</p>
-                    <p className="flex items-center gap-1 font-semibold text-gray-800">
-                        <IndianRupee size={16} />
-                        {order.total}
-                    </p>
-                </div>
-
-                <div>
-                    <p className="text-sm text-gray-500">Your Earnings</p>
-                    <p className="flex items-center gap-1 font-semibold text-green-600">
-                        <IndianRupee size={16} />
-                        {order.riderAmount}
-                    </p>
-                </div>
-            </div>
-
-            {order.deliveryAddress.mobile && (
-                <div className="flex items-center justify-between border rounded-xl p-4">
-                    <div>
-                        <p className="text-sm text-gray-500">Customer Phone</p>
-                        <p className="font-semibold text-gray-800">
-                            {order.deliveryAddress.mobile}
-                        </p>
+                        <div className="min-w-0">
+                            <p className="text-[11px] font-semibold text-text-secondary">
+                                Pickup
+                            </p>
+                            <p className="truncate text-sm font-semibold text-charcoal">
+                                {order.restaurantName}
+                            </p>
+                        </div>
                     </div>
+                </div>
 
+                <div className="rounded-2xl bg-bg-blush p-4 ring-1 ring-divider">
+                    <div className="flex items-start gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/70 text-brand-red ring-1 ring-divider">
+                            <MapPin className="h-5 w-5" />
+                        </div>
+
+                        <div className="min-w-0">
+                            <p className="text-[11px] font-semibold text-text-secondary">
+                                Drop
+                            </p>
+                            <p className="text-sm font-semibold text-charcoal">
+                                {order.deliveryAddress.formattedAddress}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="rounded-2xl bg-bg-blush p-4 ring-1 ring-divider">
+                    <p className="text-[11px] font-semibold text-text-secondary">
+                        Order total
+                    </p>
+                    <p className="mt-1 inline-flex items-center gap-1 text-sm font-extrabold text-charcoal">
+                        <IndianRupee className="h-4 w-4" />
+                        {formatINR(order.total)}
+                    </p>
+                </div>
+
+                <div className="rounded-2xl bg-bg-blush p-4 ring-1 ring-divider">
+                    <p className="text-[11px] font-semibold text-text-secondary">
+                        Your earnings
+                    </p>
+                    <p className="mt-1 inline-flex items-center gap-1 text-sm font-extrabold text-success">
+                        <IndianRupee className="h-4 w-4" />
+                        {formatINR(order.riderAmount)}
+                    </p>
+                </div>
+            </div>
+
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-bg-blush p-4 ring-1 ring-divider">
+                <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-text-secondary">
+                    <Route className="h-4 w-4" />
+                    Distance: <span className="text-charcoal">{order.distance} km</span>
+                </div>
+
+                {order.deliveryAddress.mobile && (
                     <a
                         href={`tel:${order.deliveryAddress.mobile}`}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold"
+                        className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700"
                     >
-                        <Phone size={16} />
-                        Call
+                        <Phone className="h-4 w-4" />
+                        Call customer
                     </a>
-                </div>
-            )}
+                )}
+            </div>
 
-            <div className="space-y-3">
+            <div className="mt-4 space-y-3">
                 {order.status === "rider_assigned" && (
                     <button
                         onClick={updateStatus}
-                        className="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-xl transition"
+                        className="w-full rounded-2xl bg-amber-500 py-3 text-sm font-extrabold text-white transition hover:bg-amber-600"
                     >
-                        Reached Restaurant
+                        Reached restaurant
                     </button>
                 )}
 
                 {order.status === "picked_up" && (
                     <button
                         onClick={updateStatus}
-                        className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition"
+                        className="w-full rounded-2xl bg-success py-3 text-sm font-extrabold text-white transition hover:opacity-95"
                     >
-                        Mark as Delivered
+                        Mark as delivered
                     </button>
                 )}
             </div>

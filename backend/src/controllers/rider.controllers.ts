@@ -190,3 +190,101 @@ export const accepOrder = async (req: Request, res: Response) => {
         return res.status(500).json({ msg: "Internal server error" })
     }
 }
+
+export const getRiderStats = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "rider") {
+            return res.status(401).json({ msg: "Forbidden:, rider role is required" })
+        };
+
+        const riderId = req.user?._id?.toString();
+        if (!riderId) {
+            return res.status(401).json({ msg: "Unauthorized" })
+        }
+
+        const now = new Date();
+        const startOfToday = new Date(now);
+        startOfToday.setHours(0, 0, 0, 0);
+
+        const startOfLast7Days = new Date(startOfToday);
+        startOfLast7Days.setDate(startOfLast7Days.getDate() - 6);
+
+        const startOfLast30Days = new Date(startOfToday);
+        startOfLast30Days.setDate(startOfLast30Days.getDate() - 29);
+
+        const baseMatch = {
+            riderId,
+            status: "delivered",
+            paymentStatus: "paid",
+        } as const;
+
+        const results = await Order.aggregate([
+            { $match: baseMatch },
+            {
+                $facet: {
+                    allTime: [
+                        {
+                            $group: {
+                                _id: null,
+                                deliveredOrders: { $sum: 1 },
+                                earnings: { $sum: "$riderAmount" }
+                            }
+                        }
+                    ],
+                    today: [
+                        { $match: { updatedAt: { $gte: startOfToday } } },
+                        {
+                            $group: {
+                                _id: null,
+                                deliveredOrders: { $sum: 1 },
+                                earnings: { $sum: "$riderAmount" }
+                            }
+                        }
+                    ],
+                    last7Days: [
+                        { $match: { updatedAt: { $gte: startOfLast7Days } } },
+                        {
+                            $group: {
+                                _id: null,
+                                deliveredOrders: { $sum: 1 },
+                                earnings: { $sum: "$riderAmount" }
+                            }
+                        }
+                    ],
+                    last30Days: [
+                        { $match: { updatedAt: { $gte: startOfLast30Days } } },
+                        {
+                            $group: {
+                                _id: null,
+                                deliveredOrders: { $sum: 1 },
+                                earnings: { $sum: "$riderAmount" }
+                            }
+                        }
+                    ],
+                }
+            }
+        ]);
+
+        const facet = results?.[0] || {};
+        const pick = (arr: any[] | undefined) => {
+            const row = arr?.[0];
+            return {
+                deliveredOrders: Number(row?.deliveredOrders || 0),
+                earnings: Number(row?.earnings || 0),
+            };
+        };
+
+        return res.status(200).json({
+            success: true,
+            stats: {
+                allTime: pick(facet.allTime),
+                today: pick(facet.today),
+                last7Days: pick(facet.last7Days),
+                last30Days: pick(facet.last30Days),
+            }
+        });
+    } catch (error) {
+        console.log("Error while fetching rider stats", error);
+        return res.status(500).json({ msg: "Internal server error" })
+    }
+};
