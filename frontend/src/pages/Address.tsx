@@ -141,7 +141,8 @@ const Address = () => {
                     mobile,
                     location: {
                         type: "Point",
-                        coordinates: [latitude, longitude]
+                        // coordinates: [latitude, longitude]
+                        coordinates: [longitude, latitude]
                     }
                 },
             );
