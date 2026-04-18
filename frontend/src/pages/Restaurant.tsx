@@ -92,98 +92,96 @@ const Restaurant = () => {
 
   return (
     <div className="min-h-screen bg-[color:var(--color-bg-blush)] pb-24">
-      <div className="sticky top-0 z-40 border-b border-[color:var(--color-divider)] bg-[color:var(--color-surface)]/95 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[color:var(--color-bg-blush)] p-2 text-[color:var(--color-brand-red)]">
+      <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+
+          <div className="flex items-center gap-4">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color:var(--color-bg-blush)] text-[color:var(--color-brand-red)]">
               <Utensils size={22} />
             </div>
+
             <div>
-              <h1 className="font-display text-[18px] font-extrabold text-[color:var(--color-charcoal)]">
+              <h1 className="text-lg font-bold text-[color:var(--color-charcoal)]">
                 {restaurant.name}
               </h1>
-              <p className="text-[11px] text-[color:var(--color-text-secondary)]">
-                Manage your restaurant profile, menu and incoming orders.
+              <p className="text-xs text-[color:var(--color-text-secondary)]">
+                Manage your restaurant
               </p>
             </div>
           </div>
 
-          <div
-            className={`flex items-center gap-3 rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${
-              isStoreOpen
-                ? "border-green-100 bg-green-50 text-green-700"
-                : "border-[color:var(--color-divider)] bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]"
-            }`}
-          >
-            <span>{isStoreOpen ? "Accepting orders" : "Store closed"}</span>
+          <div className="flex items-center gap-3">
+            <span
+              className={`text-xs font-semibold ${isStoreOpen
+                ? "text-green-600"
+                : "text-gray-400"
+                }`}
+            >
+              {isStoreOpen ? "Live" : "Offline"}
+            </span>
+
             <button
               onClick={toogleStatus}
-              className={`relative flex h-5 w-9 items-center rounded-full transition-colors ${
-                isStoreOpen ? "bg-green-500" : "bg-slate-300"
-              }`}
+              className={`relative h-6 w-11 rounded-full transition-all duration-300 ${isStoreOpen
+                ? "bg-green-500"
+                : "bg-gray-300"
+                }`}
             >
               <span
-                className={`absolute h-3.5 w-3.5 rounded-full bg-[color:var(--color-surface)] shadow-sm transition-transform ${
-                  isStoreOpen ? "translate-x-4" : "translate-x-1"
-                }`}
+                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-md transition-all duration-300 ${isStoreOpen
+                  ? "left-[22px]"
+                  : "left-[2px]"
+                  }`}
               />
             </button>
           </div>
         </div>
 
-        <div className="mx-auto flex max-w-5xl gap-6 px-6">
-          <button
-            onClick={() => setActiveTab("profile")}
-            className={`border-b-2 pb-2 pt-1 text-xs font-semibold flex items-center gap-2 transition-all ${
-              activeTab === "profile"
-                ? "border-[color:var(--color-brand-red)] text-[color:var(--color-brand-red)]"
-                : "border-transparent text-[color:var(--color-text-secondary)]"
-            }`}
-          >
-            <User size={16} /> Profile
-          </button>
-          <button
-            onClick={() => setActiveTab("menu")}
-            className={`border-b-2 pb-2 pt-1 text-xs font-semibold flex items-center gap-2 transition-all ${
-              activeTab === "menu"
-                ? "border-[color:var(--color-brand-red)] text-[color:var(--color-brand-red)]"
-                : "border-transparent text-[color:var(--color-text-secondary)]"
-            }`}
-          >
-            <Package size={16} /> Menu
-          </button>
-          <button
-            onClick={() => setActiveTab("orders")}
-            className={`border-b-2 pb-2 pt-1 text-xs font-semibold flex items-center gap-2 transition-all ${
-              activeTab === "orders"
-                ? "border-[color:var(--color-brand-red)] text-[color:var(--color-brand-red)]"
-                : "border-transparent text-[color:var(--color-text-secondary)]"
-            }`}
-          >
-            <Package2 size={16} /> Orders
-          </button>
+        <div className="mx-auto flex max-w-6xl gap-2 px-6 pb-3">
+          {[
+            { key: "profile", label: "Profile", icon: User },
+            { key: "menu", label: "Menu", icon: Package },
+            { key: "orders", label: "Orders", icon: Package2 },
+          ].map((tab) => {
+            const Icon = tab.icon;
+
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-all ${activeTab === tab.key
+                  ? "bg-[color:var(--color-brand-red)] text-white shadow-sm"
+                  : "text-[color:var(--color-text-secondary)] hover:bg-[color:var(--color-bg-blush)]"
+                  }`}
+              >
+                <Icon size={14} />
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      <main className="mx-auto max-w-5xl px-6 pt-6">
+      <main className="mx-auto max-w-6xl px-6 pt-6">
         {activeTab === "menu" && (
-          <div className="space-y-5">
+          <div className="space-y-6">
+
             <div className="flex items-center justify-between">
-              <h2 className="font-display text-[20px] font-extrabold text-[color:var(--color-charcoal)]">
-                Your menu
+              <h2 className="text-lg font-bold text-[color:var(--color-charcoal)]">
+                Menu items
               </h2>
+
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
-                className="btn-outline flex items-center gap-2 px-4 text-xs"
-                style={{ height: 40 }}
+                className="flex items-center gap-2 rounded-full bg-[color:var(--color-brand-red)] px-4 py-2 text-xs font-semibold text-white hover:bg-[color:var(--color-brand-red-hover)] transition"
               >
                 {showAddForm ? <X size={16} /> : <Plus size={16} />}
-                {showAddForm ? "Cancel" : "Create item"}
+                {showAddForm ? "Close" : "Add item"}
               </button>
             </div>
 
             {showAddForm && (
-              <div className="rounded-3xl bg-[color:var(--color-surface)] p-4 shadow-sm ring-1 ring-[color:var(--color-divider)]">
+              <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-[color:var(--color-divider)]">
                 <MenuForm restaurantId={restaurant._id} />
               </div>
             )}

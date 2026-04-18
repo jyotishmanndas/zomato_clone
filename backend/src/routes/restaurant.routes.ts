@@ -9,7 +9,7 @@ router.use(verifyJWT);
 
 router.post("/create", upload.single("image"), addRestaurant);
 router.patch("/status/:restaurantId", updateRestaurantStatus);
-router.patch("/update-details", updateRestaurant);
+router.patch("/update-details/:restaurantId", updateRestaurant);
 router.get("/my/restaurant", getMyRestaurant);
 router.get("/all", getNearByRestaurant);
 

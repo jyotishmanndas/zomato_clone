@@ -24,4 +24,12 @@ export const imageSchema = z.instanceof(File)
 
 export const createRestaurantSchema = restaurantSchema.extend({
     image: imageSchema
-})
+});
+
+export const updateRestaurantSchema = z.object({
+    name: z.string().min(3).optional(),
+    description: z.string().min(5).optional(),
+    phone: z.string().regex(/^\d{10}$/, "Phone must be 10 digits").optional(),
+}).refine((data) => {
+    return data.name?.trim() || data.description?.trim() || data.phone?.trim()
+}, { error: "At least one field required" })

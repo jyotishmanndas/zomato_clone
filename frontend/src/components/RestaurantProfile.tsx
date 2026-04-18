@@ -1,101 +1,134 @@
+import { useState } from "react";
 import type { Restaurant } from "../types";
 import { Clock, Globe, MapPin, Phone, Store } from "lucide-react";
+import EditRestaurantForm from "./forms/EditRestaurantForm";
 
 const RestaurantProfile = ({ restaurant }: { restaurant: Restaurant }) => {
-  return (
-    <div className="mx-auto max-w-3xl">
-      <div className="overflow-hidden rounded-[2.5rem] border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] shadow-sm">
-        <div className="relative h-44 bg-[color:var(--color-charcoal)]">
-          <img
-            src={
-              restaurant.image ||
-              "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"
-            }
-            className="h-full w-full object-cover opacity-70"
-            alt="banner"
-          />
-          <div className="absolute -bottom-10 left-8 h-20 w-20 rounded-3xl border border-[color:var(--color-surface)] bg-[color:var(--color-surface)] p-1 shadow-sm">
-            <div className="flex h-full w-full items-center justify-center rounded-[1.4rem] bg-[color:var(--color-bg-blush)] text-[color:var(--color-brand-red)]">
-              <Store size={36} />
-            </div>
-          </div>
-        </div>
+  const [openModal, setOpenModal] = useState(false);
+  const [data, setData] = useState(restaurant);
 
-        <div className="px-8 pb-8 pt-14">
-          <div className="mb-6 flex items-start justify-between gap-4">
+  return (
+    <div className="mx-auto max-w-5xl px-4">
+
+      <div className="relative h-56 w-full overflow-hidden rounded-3xl">
+        <img
+          src={
+            restaurant.image ||
+            "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200"
+          }
+          className="h-full w-full object-cover"
+          alt="banner"
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+
+        <div className="absolute bottom-5 left-6 right-6 flex items-end justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-md">
+              <Store className="h-7 w-7 text-[color:var(--color-brand-red)]" />
+            </div>
+
             <div>
-              <h2 className="font-display text-[22px] font-extrabold text-[color:var(--color-charcoal)]">
+              <h2 className="text-xl font-bold text-white">
                 {restaurant.name}
               </h2>
-              <p className="mt-1 flex items-center gap-2 text-xs text-[color:var(--color-text-secondary)]">
-                <Globe size={14} /> Official merchant partner
+              <p className="flex items-center gap-2 text-xs text-white/80">
+                <Globe size={14} />
+                Verified merchant
               </p>
             </div>
-            <button className="btn-outline h-9 px-4 text-xs font-semibold">
-              Edit details
-            </button>
           </div>
 
-          <div className="grid gap-6 border-y border-[color:var(--color-divider)] py-6 text-xs">
+          <button onClick={() => setOpenModal(true)}
+            className="rounded-full bg-white/90 px-4 py-1.5 text-xs font-semibold text-black hover:bg-white transition">
+            Edit
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-6 md:grid-cols-3">
+
+        <div className="md:col-span-2 space-y-5">
+
+          <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">
+              Contact & Location
+            </h3>
+
             <div className="space-y-4">
-              <div className="flex gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]">
-                  <Phone size={16} />
-                </div>
+
+              <div className="flex items-start gap-3">
+                <Phone className="mt-1 h-4 w-4 text-gray-500" />
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
-                    Phone support
-                  </p>
-                  <p className="mt-1 text-[13px] font-semibold text-[color:var(--color-charcoal)]">
+                  <p className="text-xs text-gray-500">Phone</p>
+                  <p className="text-sm font-semibold text-gray-900">
                     {restaurant.phone}
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]">
-                  <MapPin size={16} />
-                </div>
+              <div className="flex items-start gap-3">
+                <MapPin className="mt-1 h-4 w-4 text-gray-500" />
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
-                    Address
-                  </p>
-                  <p className="mt-1 text-[13px] font-semibold leading-snug text-[color:var(--color-charcoal)]">
+                  <p className="text-xs text-gray-500">Address</p>
+                  <p className="text-sm font-semibold text-gray-900 leading-snug">
                     {restaurant.autoLocation.formattedAddress ||
                       "Set your location"}
                   </p>
                 </div>
               </div>
-            </div>
 
-            <div className="space-y-4">
-              <div className="flex gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color:var(--color-bg-blush)] text-[color:var(--color-text-secondary)]">
-                  <Clock size={16} />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
-                    Operating hours
-                  </p>
-                  <p className="mt-1 text-[13px] font-semibold text-[color:var(--color-charcoal)]">
-                    09:00 AM – 10:00 PM
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
 
-          <div className="mt-6 rounded-3xl bg-[color:var(--color-bg-blush)] p-5">
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
-              Restaurant bio
-            </p>
-            <p className="text-[13px] leading-relaxed text-[color:var(--color-charcoal)]">
+          <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100">
+            <h3 className="text-sm font-semibold text-gray-900 mb-2">
+              About
+            </h3>
+
+            <p className="text-sm text-gray-700 leading-relaxed">
               {restaurant.description ||
-                "You haven't added a description yet. Tell your customers what makes your kitchen special."}
+                "Add a description to tell customers about your cuisine, specialties, and story."}
             </p>
           </div>
         </div>
+
+        <div className="space-y-5">
+
+          <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">
+              Status
+            </h3>
+
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Store status</span>
+              <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                Open
+              </span>
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">
+              Working Hours
+            </h3>
+
+            <div className="flex items-center gap-3 text-sm text-gray-700">
+              <Clock size={16} />
+              09:00 AM – 10:00 PM
+            </div>
+          </div>
+
+        </div>
       </div>
+
+      {openModal && (
+        <EditRestaurantForm
+          restaurant={data}
+          onClose={() => setOpenModal(false)}
+          onUpdated={(updated) => setData(updated)}
+        />
+      )}
     </div>
   );
 };
