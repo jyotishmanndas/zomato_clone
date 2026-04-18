@@ -28,9 +28,9 @@ import Admin from './pages/Admin'
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector(state => state.auth);
+  const { user, loading } = useAppSelector(state => state.auth);
 
-  useGeolocation();
+  useGeolocation(user);
   useSocket();
 
   useEffect(() => {
@@ -39,19 +39,26 @@ const App = () => {
       .catch(() => dispatch(removeUser()))
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[color:var(--color-bg-blush)]">
-        <div className="spinner-ring" role="status" aria-label="Loading" />
-        <p className="text-sm font-medium text-[color:var(--color-text-secondary)]">
-          Loading your experience…
-        </p>
-      </div>
-    )
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[color:var(--color-bg-blush)]">
+  //       <div className="spinner-ring" role="status" aria-label="Loading" />
+  //       <p className="text-sm font-medium text-[color:var(--color-text-secondary)]">
+  //         Loading your experience…
+  //       </p>
+  //     </div>
+  //   )
+  // }
 
   return (
     <>
+
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/70">
+          <div className="spinner-ring" />
+        </div>
+      )}
+
       <Routes>
         <Route element={<AuthLayout />}>
           <Route path="/" element={<ProtectedRoute><RoleRedirect /></ProtectedRoute>} />

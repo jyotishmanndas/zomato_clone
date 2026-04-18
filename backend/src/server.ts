@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 import { connectDB } from "./db/db";
 import { connectRabbitMQ } from "./rabbitmq/rabbitmq";
 import { startPaymentConsumer } from "./rabbitmq/payment.consumer";
