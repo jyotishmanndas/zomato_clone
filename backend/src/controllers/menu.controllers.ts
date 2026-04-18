@@ -77,6 +77,7 @@ export const addMenuItem = async (req: Request, res: Response) => {
                 fileId: uploadedImages.fileId
             },
             price: parsed.data.price,
+            category: parsed.data.category,
             isAvailable: parsed.data.isAvailable || true,
             restaurantId: restaurant._id
         })

@@ -4,6 +4,7 @@ export const menuSchema = z.object({
     name: z.string().trim().min(3).max(60),
     description: z.string().trim().min(3).optional(),
     price: z.coerce.number().positive().max(10000),
+    category: z.enum(["veg", "non-veg"]),
     isAvailable: z.boolean(),
 });
 
@@ -24,4 +25,5 @@ export const updateMenuItemSchema = z.object({
     name: z.string().trim().min(3).max(60).optional(),
     description: z.string().trim().min(3).optional(),
     price: z.coerce.number().positive().max(10000).optional(),
+    category: z.enum(["veg", "non-veg"]).optional()
 })

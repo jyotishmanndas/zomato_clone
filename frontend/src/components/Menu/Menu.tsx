@@ -1,8 +1,10 @@
 import { Edit2, Trash2 } from "lucide-react";
-// import { useMenuApi } from "../../hooks/useMenuApi";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useState } from "react";
+import EditMenuForm from "../forms/EditMenuForm";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface MenuProps {
   menu: any;
@@ -11,39 +13,18 @@ interface MenuProps {
 }
 
 const Menu = ({ menu, isSeller, restaurantId }: MenuProps) => {
-  // const { data, isLoading } = useMenuApi();
-  // const [menus, setMenus] = useState<any[]>([]);
-
-  // useEffect(() => {
-  //     if (data) {
-  //         setMenus(data);
-  //     }
-  // }, [data]);
+  const [openEdit, setOpenEdit] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleToggleAvailability = async (id: string) => {
-    // setMenus((prev) =>
-    //     prev.map((item) =>
-    //         item._id === id
-    //             ? { ...item, isAvailable: !item.isAvailable }
-    //             : item
-    //     )
-    // );
-
     try {
       const res = await axiosInstance.patch(
         `/api/v1/menu/status/${id}`
       );
       toast.success(res.data.msg);
+      queryClient.invalidateQueries({ queryKey: ["menu"] });
     } catch (error) {
       toast.error("Failed to update availability");
-
-      // setMenus((prev) =>
-      //     prev.map((item) =>
-      //         item._id === id
-      //             ? { ...item, isAvailable: !item.isAvailable }
-      //             : item
-      //     )
-      // );
     }
   };
 
@@ -54,6 +35,7 @@ const Menu = ({ menu, isSeller, restaurantId }: MenuProps) => {
       await axiosInstance.delete(`/api/v1/menu/delete/${id}`);
       // setMenus((prev) => prev.filter((item) => item._id !== id));
       toast.success("Item deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["menu"] });
     } catch (error) {
       toast.error("Delete failed");
     }
@@ -112,14 +94,24 @@ const Menu = ({ menu, isSeller, restaurantId }: MenuProps) => {
         <div>
           <div className="mb-1 flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5">
-              <span className="badge-veg">
-                <span className="badge-veg-dot" />
+              <span
+                className={`inline-flex h-3 w-3 items-center justify-center rounded-[4px] border ${menu.category === "veg"
+                  ? "border-[color:var(--color-success)]"
+                  : "border-[color:var(--color-nonveg)]"
+                  }`}
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${menu.category === "veg"
+                    ? "bg-[color:var(--color-success)]"
+                    : "bg-[color:var(--color-nonveg)]"
+                    }`}
+                />
               </span>
+
               <h4 className="text-[15px] font-semibold text-[color:var(--color-charcoal)]">
                 {menu.name}
               </h4>
             </div>
-
           </div>
 
           {menu.description && (
@@ -138,18 +130,19 @@ const Menu = ({ menu, isSeller, restaurantId }: MenuProps) => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => handleToggleAvailability(menu._id)}
-                className={`relative h-5 w-9 rounded-full border transition-all duration-300 ${menu.isAvailable
-                    ? "border-[color:var(--color-brand-red)] bg-[color:var(--color-brand-red)]/10"
-                    : "border-[color:var(--color-divider)] bg-[color:var(--color-divider)]"
+                className={`relative flex items-center h-5 w-10 rounded-full border transition-all duration-300 ${menu.isAvailable
+                  ? "border-[color:var(--color-brand-red)] bg-[color:var(--color-brand-red)]/10"
+                  : "border-[color:var(--color-divider)] bg-[color:var(--color-divider)]"
                   }`}
               >
                 <span
-                  className={`absolute top-0.5 h-4 w-4 rounded-full bg-[color:var(--color-surface)] shadow-sm transition-all duration-300 ${menu.isAvailable ? "right-0.5" : "left-0.5"
+                  className={`absolute h-4 w-4 rounded-full bg-[color:var(--color-surface)] shadow-sm transition-all duration-300 ${menu.isAvailable ? "translate-x-5" : "translate-x-0.5"
                     }`}
                 />
               </button>
 
-              <button className="rounded-lg p-2 text-[color:var(--color-text-secondary)] transition-colors hover:bg-[color:var(--color-bg-blush)] hover:text-[color:var(--color-brand-red)]">
+              <button onClick={() => setOpenEdit(true)}
+                className="rounded-lg p-2 text-[color:var(--color-text-secondary)] transition-colors hover:bg-[color:var(--color-bg-blush)] hover:text-[color:var(--color-brand-red)]">
                 <Edit2 size={16} />
               </button>
 
@@ -159,6 +152,13 @@ const Menu = ({ menu, isSeller, restaurantId }: MenuProps) => {
               >
                 <Trash2 size={16} />
               </button>
+
+              {openEdit && (
+                <EditMenuForm
+                  menu={menu}
+                  onClose={() => setOpenEdit(false)}
+                />
+              )}
             </div>
           ) : (
             menu.isAvailable && (

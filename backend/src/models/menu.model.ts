@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document, Types, Model } from "mongoose";
 
+type Category = "veg" | "non-veg";
+
 export interface IMenu extends Document {
     name: string;
     description?: string;
@@ -8,6 +10,7 @@ export interface IMenu extends Document {
         fileId: string
     };
     price: number;
+    category: Category;
     isAvailable: boolean
     restaurantId: Types.ObjectId;
     createdAt: Date,
@@ -37,6 +40,12 @@ const menuSchema = new Schema<IMenu>({
     price: {
         type: Number,
         required: true
+    },
+    category: {
+        type: String,
+        enum: ["veg", "non-veg"],
+        required: true,
+        default: "veg"
     },
     isAvailable: {
         type: Boolean,

@@ -18,9 +18,10 @@ import { useQueryClient } from "@tanstack/react-query";
 
 interface AddMenuFormProps {
     restaurantId: string;
+    onSuccess: () => void;
 }
 
-const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
+const MenuForm = ({ restaurantId, onSuccess }: AddMenuFormProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const queryClient = useQueryClient();
 
@@ -32,6 +33,7 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
             name: "",
             description: "",
             price: 0,
+            category: "veg",
             isAvailable: true,
             image: undefined,
         },
@@ -49,6 +51,7 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
         };
 
         formData.append("menuImg", data.image);
+        formData.append("category", data.category);
 
         try {
             const res = await axiosInstance.post(
@@ -61,8 +64,9 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
 
             if (res.status === 201) {
                 toast.success(res.data.msg);
-                queryClient.invalidateQueries({ queryKey: ["menu"] });
                 form.reset();
+                onSuccess();
+                queryClient.invalidateQueries({ queryKey: ["menu"] });
                 setPreview(null);
             }
         } catch (error) {
@@ -158,6 +162,59 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
                             />
                         </div>
                     </div>
+
+                    <Controller
+                        name="category"
+                        control={form.control}
+                        render={({ field }) => (
+                            <div>
+                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
+                                    Category
+                                </label>
+
+                                <div className="mt-3 grid grid-cols-2 gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => field.onChange("veg")}
+                                        className={`flex items-center gap-3 rounded-xl px-4 py-3 border transition-all
+                                            ${field.value === "veg"
+                                                ? "border-green-500 bg-green-50"
+                                                : "border-slate-200 bg-white hover:border-green-300"
+                                            }
+          `}
+                                    >
+                                        <div className="flex h-4 w-4 items-center justify-center rounded-sm border border-green-600">
+                                            <div className="h-2 w-2 rounded-full bg-green-600" />
+                                        </div>
+
+                                        <span className="text-sm font-semibold text-slate-700">
+                                            Veg
+                                        </span>
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => field.onChange("non-veg")}
+                                        className={`flex items-center gap-3 rounded-xl px-4 py-3 border transition-all
+            ${field.value === "non-veg"
+                                                ? "border-red-500 bg-red-50"
+                                                : "border-slate-200 bg-white hover:border-red-300"
+                                            }
+          `}
+                                    >
+                                        <div className="flex h-4 w-4 items-center justify-center rounded-sm border border-red-600">
+                                            <div className="h-2 w-2 rounded-full bg-red-600" />
+                                        </div>
+
+                                        <span className="text-sm font-semibold text-slate-700">
+                                            Non-Veg
+                                        </span>
+                                    </button>
+
+                                </div>
+                            </div>
+                        )}
+                    />
 
                     <div>
                         <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
@@ -264,7 +321,7 @@ const MenuForm = ({ restaurantId }: AddMenuFormProps) => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-red-500 hover:bg-red-600 text-white py-5 rounded-2xl font-bold text-lg shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                        className="w-full bg-red-500 hover:bg-red-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                     >
                         {isSubmitting ? (
                             <>

@@ -104,22 +104,6 @@
     @apply inline-flex items-center rounded-full border border-[color:var(--color-divider)] bg-[color:var(--color-surface)] px-3 py-1 text-xs font-medium text-[color:var(--color-text-secondary)];
   }
 
-  .badge-veg {
-    @apply inline-flex h-3 w-3 items-center justify-center rounded-[4px] border border-[color:var(--color-success)];
-  }
-
-  .badge-veg-dot {
-    @apply h-1.5 w-1.5 rounded-full bg-[color:var(--color-success)];
-  }
-
-  .badge-nonveg {
-    @apply inline-flex h-3 w-3 items-center justify-center rounded-[4px] border border-[color:var(--color-nonveg)];
-  }
-
-  .badge-nonveg-dot {
-    @apply h-1.5 w-1.5 rounded-full bg-[color:var(--color-nonveg)];
-  }
-
   .btn-primary {
     @apply inline-flex h-[52px] w-full items-center justify-center rounded-full bg-[color:var(--color-brand-red)] px-6 text-sm font-bold text-white transition-colors hover:bg-[color:var(--color-brand-red-hover)] disabled:cursor-not-allowed disabled:bg-slate-300;
   }

@@ -171,26 +171,53 @@ const Restaurant = () => {
                 Menu items
               </h2>
 
-              <button
-                onClick={() => setShowAddForm(!showAddForm)}
-                className="flex items-center gap-2 rounded-full bg-[color:var(--color-brand-red)] px-4 py-2 text-xs font-semibold text-white hover:bg-[color:var(--color-brand-red-hover)] transition"
-              >
-                {showAddForm ? <X size={16} /> : <Plus size={16} />}
-                {showAddForm ? "Close" : "Add item"}
-              </button>
+              {menus.length > 0 && (
+                <button
+                  onClick={() => setShowAddForm(!showAddForm)}
+                  className="flex items-center gap-2 rounded-full bg-[color:var(--color-brand-red)] px-4 py-2 text-xs font-semibold text-white hover:bg-[color:var(--color-brand-red-hover)] transition"
+                >
+                  {showAddForm ? <X size={16} /> : <Plus size={16} />}
+                  {showAddForm ? "Close" : "Add item"}
+                </button>
+              )}
             </div>
 
-            {showAddForm && (
+            {showAddForm ? (
               <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-[color:var(--color-divider)]">
-                <MenuForm restaurantId={restaurant._id} />
+                <MenuForm
+                  restaurantId={restaurant._id}
+                  onSuccess={() => setShowAddForm(false)} />
+              </div>
+            ) : menus.length === 0 ? (
+              <div className="flex flex-col items-center justify-center rounded-2xl bg-white p-10 text-center shadow-sm ring-1 ring-[color:var(--color-divider)]">
+
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[color:var(--color-bg-blush)] text-[color:var(--color-brand-red)]">
+                  <Utensils size={28} />
+                </div>
+
+                <h3 className="text-lg font-bold text-[color:var(--color-charcoal)]">
+                  No menu items yet
+                </h3>
+
+                <p className="mt-1 text-sm text-[color:var(--color-text-secondary)] max-w-sm">
+                  Start by adding your first dish to attract customers.
+                </p>
+
+                <button
+                  onClick={() => setShowAddForm(true)}
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-[color:var(--color-brand-red)] px-5 py-2 text-xs font-semibold text-white hover:bg-[color:var(--color-brand-red-hover)]"
+                >
+                  <Plus size={16} />
+                  Add your first item
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {menus.map((m: any) => (
+                  <Menu key={m.id} menu={m} isSeller={true} />
+                ))}
               </div>
             )}
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {menus.map((m: any) => (
-                <Menu key={m.id} menu={m} isSeller={true} />
-              ))}
-            </div>
           </div>
         )}
 
