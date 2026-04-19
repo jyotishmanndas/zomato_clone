@@ -183,13 +183,11 @@ const RiderDashboard = () => {
     <div className="min-h-screen bg-bg-blush pt-20 pb-24">
       <div className="mx-auto max-w-5xl px-4">
 
-        {/* HEADER */}
         <RiderDashboardHeader
           isAvailable={data.isAvailable}
           onLogout={handleLogout}
         />
 
-        {/* TABS */}
         <div className="mt-5 flex gap-2 rounded-xl bg-white p-1 shadow-sm w-fit">
           <button
             onClick={() => setActiveTab("dashboard")}
@@ -212,7 +210,6 @@ const RiderDashboard = () => {
           </button>
         </div>
 
-        {/* CONTENT */}
         {activeTab === "dashboard" && (
           <main className="mt-5 grid gap-5 md:grid-cols-[1.2fr,1.8fr]">
             <RiderProfileSection

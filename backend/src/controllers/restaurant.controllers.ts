@@ -180,14 +180,26 @@ export const getNearByRestaurant = async (req: Request, res: Response) => {
 
         const query: any = {
             isVerified: true
-        }
+        };
 
-        if (search && typeof search === "string") {
+        const searchh =
+            typeof req.query.search === "string"
+                ? req.query.search.trim()
+                : "";
+
+        if (searchh.length > 0) {
             query.name = {
                 $regex: search,
                 $options: "i"
-            }
+            };
         };
+
+        // if (search && typeof search === "string") {
+        //     query.name = {
+        //         $regex: search,
+        //         $options: "i"
+        //     }
+        // };
 
         const restaurant = await Restaurant.aggregate([
             {

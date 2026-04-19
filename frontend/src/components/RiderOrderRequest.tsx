@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { axiosInstance } from '../config/axiosInstance';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
     const [accepting, setAccepting] = useState(false);
     const [secondsLeft, setSecondLeft] = useState(10);
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -27,18 +29,18 @@ const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
         try {
             setAccepting(true);
             const res = await axiosInstance.put(`/api/v1/rider/accept/${orderId}`);
-
             if (res.status === 200) {
-                toast.success("Order accepted")
+                toast.success("Order accepted");
+                queryClient.invalidateQueries({ queryKey: ["riderorder"] });
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 toast.error(error.response?.data.msg)
             }
-        } finally{
+        } finally {
             setAccepting(false);
         }
-    }
+    };
 
     return (
         <div className='rounded-xl bg-white p-4 shadow-sm border border-green-300 space-y-3'>

@@ -9,7 +9,10 @@ const Home = () => {
   const { location } = useAppSelector((state) => state.location);
   const [searchParams] = useSearchParams();
 
-  const search = searchParams.get("search") || "";
+  const search = (searchParams.get("search") || "").trim();
+
+  console.log("SEARCH FRONTEND", search);
+
 
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,8 +56,12 @@ const Home = () => {
       });
 
       setRestaurants(res.data.restaurant ?? []);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        setRestaurants([]);
+      } else {
+        console.log(error);
+      }
     } finally {
       setLoading(false);
     }

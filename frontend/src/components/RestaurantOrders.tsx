@@ -8,7 +8,9 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
     const queryClient = useQueryClient();
-    const [audioUnlocked, setAudioUnlocked] = useState(false);
+    const [audioUnlocked, setAudioUnlocked] = useState(
+        localStorage.getItem("audioEnabled") === "true"
+    );
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const { data, isLoading } = useOrderApi(restaurantId);
@@ -19,7 +21,8 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
             audioRef.current.play().then(() => {
                 audioRef.current!.pause();
                 audioRef.current!.currentTime = 0;
-                setAudioUnlocked(true)
+                setAudioUnlocked(true);
+                localStorage.setItem("audioEnabled", "true");
             }).catch((error) => {
                 console.log("Failed to unlock audio", error);
             })
@@ -100,7 +103,8 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
                             <p className='text-[11px]'>Get a chime whenever a new order is placed or updated.</p>
                         </div>
                     </div>
-                    <button onClick={unlockAudio} className='rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700'>Enable sound</button>
+                    <button onClick={unlockAudio}
+                        className='rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700'>Enable sound</button>
                 </div>
             )}
 
