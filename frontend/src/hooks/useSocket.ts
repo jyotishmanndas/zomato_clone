@@ -15,7 +15,7 @@ export const useSocket = () => {
 
         if (socketRef.current) return;
 
-        socketRef.current = io("http://localhost:5000", {
+        socketRef.current = io(import.meta.env.VITE_API_URL, {
             withCredentials: true,
             transports: ["websocket"]
         });
