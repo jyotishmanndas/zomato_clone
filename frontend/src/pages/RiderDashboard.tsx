@@ -51,8 +51,12 @@ const RiderDashboard = () => {
       setAudioUnlocked(true);
       toast.success("Sound enabled");
     } catch {
-      toast.success("Tap again to enable sound");
+      toast.error("Tap again to enable sound");
     }
+  };
+
+  const handleOrderAccepted = (orderId: string) => {
+    setIncomingOrders((prev) => prev.filter((id) => id !== orderId));
   };
 
   useEffect(() => {
@@ -71,7 +75,7 @@ const RiderDashboard = () => {
 
       setTimeout(() => {
         setIncomingOrders((prev) => prev.filter((id) => id !== orderId));
-      }, 20000);
+      }, 10000);
     };
 
     socket.on("order:available", onOrderAvailable);
@@ -228,6 +232,7 @@ const RiderDashboard = () => {
               audioUnlocked={audioUnlocked}
               onEnableSound={unlockAudio}
               currentRiderOrder={currentRiderOrder}
+              onOrderAccepted={handleOrderAccepted}
             />
           </main>
         )}

@@ -277,7 +277,6 @@ export const getCurrentOrdersForRiders = async (req: Request, res: Response) => 
         const rider = await Rider.findOne({
             userId: req.user?._id,
             isVerified: true,
-            isAvailable: true
         });
         if (!rider) {
             return res.status(404).json({ msg: "rider not found" })
@@ -312,7 +311,6 @@ export const updateOrderStatusForRider = async (req: Request, res: Response) => 
         const rider = await Rider.findOne({
             userId: req.user?._id,
             isVerified: true,
-            isAvailable: true
         });
         if (!rider) {
             return res.status(404).json({ msg: "rider not found" })

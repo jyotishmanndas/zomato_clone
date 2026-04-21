@@ -9,6 +9,7 @@ type RiderOrdersSectionProps = {
   audioUnlocked: boolean;
   onEnableSound: () => void;
   currentRiderOrder?: IOrder[];
+  onOrderAccepted: (orderId: string) => void;
 };
 
 export default function RiderOrdersSection({
@@ -17,6 +18,7 @@ export default function RiderOrdersSection({
   audioUnlocked,
   onEnableSound,
   currentRiderOrder,
+  onOrderAccepted
 }: RiderOrdersSectionProps) {
   return (
     <section className="space-y-4">
@@ -60,7 +62,11 @@ export default function RiderOrdersSection({
         {isAvailable && incomingOrders.length > 0 && (
           <div className="space-y-3">
             {incomingOrders.map((orderId) => (
-              <RiderOrderRequest key={orderId} orderId={orderId} />
+              <RiderOrderRequest
+                key={orderId}
+                orderId={orderId}
+                onAccepted={onOrderAccepted}
+              />
             ))}
           </div>
         )}

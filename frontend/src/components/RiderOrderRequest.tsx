@@ -4,7 +4,12 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 
-const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
+const RiderOrderRequest = ({
+    orderId, onAccepted
+}: {
+    orderId: string
+    onAccepted: (id: string) => void;
+}) => {
     const [accepting, setAccepting] = useState(false);
     const [secondsLeft, setSecondLeft] = useState(10);
     const queryClient = useQueryClient();
@@ -28,6 +33,8 @@ const RiderOrderRequest = ({ orderId }: { orderId: string }) => {
     const acceptOrder = async () => {
         try {
             setAccepting(true);
+            onAccepted(orderId);
+
             const res = await axiosInstance.put(`/api/v1/rider/accept/${orderId}`);
             if (res.status === 200) {
                 toast.success("Order accepted");

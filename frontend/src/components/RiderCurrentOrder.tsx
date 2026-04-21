@@ -37,8 +37,21 @@ const RiderCurrentOrder = ({ order }: RiderCurrentOrderProps) => {
 
             if (res.status === 200) {
                 toast.success(res.data.msg);
-                queryClient.invalidateQueries({
-                    queryKey: ["riderorder"],
+
+                const updatedOrder = res.data.order; // ✅ IMPORTANT
+
+                queryClient.setQueryData(["riderorder"], (old: any) => {
+                    if (!old) return old;
+
+                    // ✅ REMOVE only if delivered
+                    if (updatedOrder.status === "delivered") {
+                        return old.filter((o: any) => o._id !== order._id);
+                    }
+
+                    // ✅ OTHERWISE update
+                    return old.map((o: any) =>
+                        o._id === order._id ? updatedOrder : o
+                    );
                 });
             }
         } catch (error) {
