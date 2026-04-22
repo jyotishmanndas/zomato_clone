@@ -8,9 +8,6 @@ import riderAudio from "../assets/riderAudio.mp3";
 import { useSocket } from "../hooks/useSocket";
 import { useRiderOrderApi } from "../hooks/useOrderApi";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
-import { useAppDispatch } from "../hooks/useRedux";
-import { removeUser } from "../features/authSlice";
 
 import RiderDashboardHeader from "../components/rider-dashboard/RiderDashboardHeader";
 import RiderPerformanceSection from "../components/rider-dashboard/RiderPerformanceSection";
@@ -24,7 +21,9 @@ const RiderDashboard = () => {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [incomingOrders, setIncomingOrders] = useState<string[]>([]);
-  const [audioUnlocked, setAudioUnlocked] = useState(false);
+  const [audioUnlocked, setAudioUnlocked] = useState(() => {
+    return localStorage.getItem("rider_audio_enabled") === "true";
+  });
 
   const { data, isLoading } = useRiderProfile();
   const { data: riderStats } = useRiderStats();
@@ -32,8 +31,6 @@ const RiderDashboard = () => {
 
   const socketRef = useSocket();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     audioRef.current = new Audio(riderAudio);
@@ -49,6 +46,7 @@ const RiderDashboard = () => {
       audioRef.current.currentTime = 0;
 
       setAudioUnlocked(true);
+      localStorage.setItem("rider_audio_enabled", "true")
       toast.success("Sound enabled");
     } catch {
       toast.error("Tap again to enable sound");
@@ -68,10 +66,10 @@ const RiderDashboard = () => {
         prev.includes(orderId) ? prev : [...prev, orderId]
       );
 
-      if (audioRef.current) {
+      if (audioRef.current && audioUnlocked) {
         audioRef.current.currentTime = 0;
         audioRef.current.play().catch(() => { });
-      }
+      };
 
       setTimeout(() => {
         setIncomingOrders((prev) => prev.filter((id) => id !== orderId));
@@ -116,22 +114,6 @@ const RiderDashboard = () => {
         }
       }
     });
-  };
-
-  const handleLogout = async () => {
-    try {
-      const res = await axiosInstance.post(`/api/v1/auth/user/logout`);
-      if (res.status === 200) {
-        toast.success(res.data.msg);
-        dispatch(removeUser());
-        queryClient.clear();
-        navigate("/login");
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data.msg);
-      }
-    }
   };
 
   if (isLoading) {
@@ -189,15 +171,14 @@ const RiderDashboard = () => {
 
         <RiderDashboardHeader
           isAvailable={data.isAvailable}
-          onLogout={handleLogout}
         />
 
         <div className="mt-5 flex gap-2 rounded-xl bg-white p-1 shadow-sm w-fit">
           <button
             onClick={() => setActiveTab("dashboard")}
             className={`px-4 py-1.5 text-sm font-semibold rounded-lg transition ${activeTab === "dashboard"
-                ? "bg-brand-red text-white"
-                : "text-gray-600"
+              ? "bg-brand-red text-white"
+              : "text-gray-600"
               }`}
           >
             Dashboard
@@ -206,8 +187,8 @@ const RiderDashboard = () => {
           <button
             onClick={() => setActiveTab("performance")}
             className={`px-4 py-1.5 text-sm font-semibold rounded-lg transition ${activeTab === "performance"
-                ? "bg-brand-red text-white"
-                : "text-gray-600"
+              ? "bg-brand-red text-white"
+              : "text-gray-600"
               }`}
           >
             Performance

@@ -160,7 +160,7 @@ export const logoutController = async (req: Request, res: Response) => {
                 secure: true,
                 sameSite: "none",
             })
-            .json({ success: true, msg: "user logged out successfully" })
+            .json({ success: true, msg: "Logged out successfully" })
     } catch (error) {
         console.log("Error while logged out", error);
         return res.status(500).json({ msg: "Internal server error" })

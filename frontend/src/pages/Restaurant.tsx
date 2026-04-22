@@ -17,10 +17,13 @@ import RestaurantProfile from "../components/RestaurantProfile";
 import { useMenuApi } from "../hooks/useMenuApi";
 import Menu from "../components/Menu/Menu";
 import RestaurantOrders from "../components/RestaurantOrders";
+import { useLogout } from "../hooks/useLogout";
 
 const Restaurant = () => {
   const { data, isLoading } = useRestaurantApi();
   const { data: menus } = useMenuApi();
+  const logout = useLogout();
+
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState("profile");
@@ -133,6 +136,13 @@ const Restaurant = () => {
                   : "left-[2px]"
                   }`}
               />
+            </button>
+
+            <button
+              onClick={logout}
+              className="rounded-full bg-red-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-600"
+            >
+              Logout
             </button>
           </div>
         </div>

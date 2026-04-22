@@ -1,14 +1,16 @@
 import { Bike } from "lucide-react";
+import { useLogout } from "../../hooks/useLogout";
 
 type RiderDashboardHeaderProps = {
   isAvailable: boolean;
-  onLogout: () => void;
 };
 
 export default function RiderDashboardHeader({
   isAvailable,
-  onLogout,
 }: RiderDashboardHeaderProps) {
+
+  const logout = useLogout()
+
   return (
     <header className="mb-5 flex items-center justify-between gap-4 rounded-3xl bg-surface p-4 shadow-sm ring-1 ring-divider">
       <div className="flex items-center gap-3">
@@ -29,9 +31,8 @@ export default function RiderDashboardHeader({
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 rounded-full bg-bg-blush px-3 py-1">
           <span
-            className={`inline-flex h-2 w-2 rounded-full ${
-              isAvailable ? "bg-success" : "bg-red-500"
-            }`}
+            className={`inline-flex h-2 w-2 rounded-full ${isAvailable ? "bg-success" : "bg-red-500"
+              }`}
           />
           <span className="text-xs font-medium text-text-secondary">
             {isAvailable ? "Online" : "Offline"}
@@ -39,7 +40,7 @@ export default function RiderDashboardHeader({
         </div>
 
         <button
-          onClick={onLogout}
+          onClick={logout}
           className="rounded-full bg-red-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-600"
         >
           Logout

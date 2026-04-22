@@ -8,9 +8,9 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
     const queryClient = useQueryClient();
-    const [audioUnlocked, setAudioUnlocked] = useState(
-        localStorage.getItem("audioEnabled") === "true"
-    );
+    const [audioUnlocked, setAudioUnlocked] = useState(() => {
+        return localStorage.getItem("audioEnabled") === "true"
+    });
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const { data, isLoading } = useOrderApi(restaurantId);
