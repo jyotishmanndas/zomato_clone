@@ -42,4 +42,9 @@ app.use("/api/v1/location", locationRoutes);
 app.use("/api/v1/rider", riderRoutes);
 app.use("/api/v1/admin", adminRoutes);
 
+app.get("/server", (req, res) => {
+    return res.json({ msg: "hello" })
+})
+
+
 export default server;
