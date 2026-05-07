@@ -22,6 +22,7 @@ A full-stack food delivery application built with a modern **React + Vite** fron
 - **Socket.IO** (real-time rider/order updates)
 - **Razorpay** (payment integration)
 - **Google Auth** (OAuth login)
+- **Docker / Docker Compose** (containerized backend + MongoDB + RabbitMQ)
 
 ---
 
@@ -134,7 +135,7 @@ npm install
 Create a `.env` file (copy from `.env.example` if available) and set the required keys:
 
 - `PORT` (e.g., 5000)
-- `MONGO_URI` (MongoDB connection string)
+- `MONGODB_URI` (MongoDB connection string, e.g. `mongodb://localhost:27017`)
 - `JWT_SECRET`
 - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`
 - `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET`
@@ -144,6 +145,27 @@ Start backend server:
 
 ```bash
 npm run dev
+```
+
+### 2b) Backend + MongoDB + RabbitMQ (Docker)
+
+From the `backend/` folder you can start everything with Docker Compose:
+
+```bash
+cd backend
+docker compose up --build
+```
+
+This will start:
+
+- `backend` API on `http://localhost:5000`
+- `mongodb` on `mongodb://localhost:27017`
+- `rabbitmq` on `amqp://localhost:5672` (management UI at `http://localhost:15672`)
+
+To stop and remove containers:
+
+```bash
+docker compose down
 ```
 
 ### 3) Frontend (Web App)
